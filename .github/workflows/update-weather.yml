@@ -1,0 +1,42 @@
+name: Update weather data
+
+on:
+  workflow_dispatch:
+
+  schedule:
+    # Every two hours, at minute 17.
+    # GitHub Actions cron uses UTC.
+    - cron: "17 */2 * * *"
+
+permissions:
+  contents: write
+
+jobs:
+  update-weather:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Generate weather data
+        run: python update_weather.py
+
+      - name: Commit updated data
+        run: |
+          if git diff --quiet -- weather-data.js; then
+            echo "No weather changes to commit."
+            exit 0
+          fi
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git add weather-data.js
+          git commit -m "Update weather data"
+          git push
