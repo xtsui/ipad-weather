@@ -8,10 +8,13 @@
     content="width=device-width, initial-scale=1,
              maximum-scale=1, user-scalable=no">
 
+  <!-- iOS home-screen web app -->
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="apple-mobile-web-app-title" content="Weather">
+  <meta name="format-detection" content="telephone=no">
 
-  <!-- Complete reload every 6 hours -->
+  <!-- Full page reload every 6 hours -->
   <meta http-equiv="refresh" content="21600">
 
   <title>Paris Weather</title>
@@ -26,368 +29,466 @@
       width: 100%;
       height: 100%;
       margin: 0;
+      padding: 0;
       overflow: hidden;
       background: #071725;
       color: #ffffff;
+
       font-family:
         -apple-system,
         BlinkMacSystemFont,
         "Helvetica Neue",
+        Helvetica,
         Arial,
         sans-serif;
+
+      -webkit-text-size-adjust: 100%;
+      -webkit-user-select: none;
+      -webkit-touch-callout: none;
     }
 
     body {
-      position: relative;
+      position: fixed;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
     }
 
-    /* TOP SECTION */
+    #app {
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      overflow: hidden;
+      background: #071725;
+    }
+
+    /*
+     * HEADER
+     */
 
     #header {
+      position: absolute;
+      top: 14px;
+      left: 0;
       width: 100%;
-      height: 150px;
-      padding-top: 18px;
+      height: 108px;
       text-align: center;
     }
 
     #clock {
-      font-size: 88px;
+      font-size: 80px;
       line-height: 0.95;
       font-weight: 300;
       letter-spacing: 2px;
+      color: #ffffff;
     }
 
     #date {
-      margin-top: 13px;
-      font-size: 27px;
-      line-height: 1.15;
-      font-weight: 500;
-      letter-spacing: 0.3px;
-      color: #e6eef5;
+      margin-top: 10px;
+      font-size: 25px;
+      line-height: 1.1;
+      font-weight: 600;
+      color: #e4edf4;
     }
 
-    /* CURRENT WEATHER */
+    /*
+     * CURRENT WEATHER
+     */
 
-    #current-section {
+    #current {
+      position: absolute;
+      top: 130px;
+      left: 0;
       width: 100%;
-      height: 330px;
-      padding-top: 5px;
+      height: 195px;
       text-align: center;
     }
 
     #location {
-      font-size: 25px;
+      font-size: 22px;
       line-height: 1;
       font-weight: 700;
       letter-spacing: 7px;
       text-transform: uppercase;
-      color: #dce9f3;
+      color: #d3e1eb;
     }
 
-    #current-weather {
-      margin-top: 13px;
-      height: 145px;
+    #current-line {
+      height: 116px;
+      margin-top: 4px;
       white-space: nowrap;
     }
 
-    #weather-icon {
+    #current-icon {
       display: inline-block;
-      margin-right: 23px;
-      font-size: 90px;
-      line-height: 145px;
+      margin-right: 17px;
+      font-size: 72px;
+      line-height: 116px;
       vertical-align: middle;
+      color: #ffffff;
     }
 
     #temperature {
       display: inline-block;
-      font-size: 142px;
-      line-height: 145px;
+      font-size: 118px;
+      line-height: 116px;
       font-weight: 300;
       vertical-align: middle;
+      color: #ffffff;
     }
 
     #temperature-unit {
       display: inline-block;
-      margin-left: 6px;
-      padding-top: 16px;
-      font-size: 44px;
+      margin-left: 5px;
+      padding-top: 12px;
+      font-size: 36px;
       line-height: 1;
-      font-weight: 400;
+      font-weight: 500;
       vertical-align: top;
+      color: #ffffff;
     }
 
     #condition {
       margin-top: 4px;
-      font-size: 34px;
-      line-height: 1.15;
-      font-weight: 500;
+      padding: 0 20px;
+      font-size: 30px;
+      line-height: 1.1;
+      font-weight: 600;
       color: #ffffff;
     }
 
-    #details {
-      display: table;
+    /*
+     * CURRENT WEATHER DETAILS
+     */
+
+    #details-wrap {
+      position: absolute;
+      top: 335px;
+      left: 4%;
       width: 92%;
-      max-width: 980px;
-      margin: 26px auto 0;
-      table-layout: fixed;
-      border-collapse: separate;
-      border-spacing: 8px 0;
+      height: 150px;
+    }
+
+    #details {
+      width: 100%;
+      height: 150px;
+      font-size: 0;
+      text-align: center;
     }
 
     .detail {
-      display: table-cell;
-      padding: 10px 5px;
-      background: #10283a;
-      border: 1px solid #29465b;
-      border-radius: 8px;
+      display: inline-block;
+      width: 48%;
+      height: 68px;
+      margin: 4px 1%;
+      padding: 8px 4px;
+
+      background: #102b3e;
+      border: 1px solid #315169;
+      border-radius: 9px;
+
       text-align: center;
-      vertical-align: middle;
+      vertical-align: top;
     }
 
     .detail-label {
       display: block;
-      margin-bottom: 4px;
-      font-size: 17px;
+      margin-bottom: 6px;
+
+      font-size: 16px;
       line-height: 1;
-      font-weight: 600;
-      color: #aebfcd;
-      text-transform: uppercase;
-      letter-spacing: 0.7px;
+      font-weight: 700;
+      letter-spacing: 0.8px;
+
+      color: #b8c9d5;
     }
 
     .detail-value {
       display: block;
+
       font-size: 25px;
-      line-height: 1.1;
-      font-weight: 700;
+      line-height: 1;
+      font-weight: 800;
+
       color: #ffffff;
       white-space: nowrap;
     }
 
-    /* FIVE-DAY FORECAST */
+    /*
+     * FIVE-DAY FORECAST
+     */
+
+    #forecast-title {
+      position: absolute;
+      top: 505px;
+      left: 5%;
+      width: 90%;
+
+      font-size: 17px;
+      line-height: 1;
+      font-weight: 700;
+      letter-spacing: 2px;
+
+      color: #9fb4c3;
+      text-align: left;
+    }
+
+    #forecast-wrap {
+      position: absolute;
+      top: 533px;
+      left: 4%;
+      width: 92%;
+      height: 405px;
+    }
 
     #forecast {
-      display: table;
-      position: absolute;
-      right: 18px;
-      bottom: 38px;
-      left: 18px;
-      width: auto;
-      height: 220px;
-      table-layout: fixed;
-      border-collapse: separate;
-      border-spacing: 8px 0;
+      width: 100%;
+      height: 405px;
     }
 
     .forecast-day {
-      display: table-cell;
-      width: 20%;
-      padding: 13px 5px 11px;
-      background: #10283a;
-      border: 2px solid #29465b;
+      display: table;
+      width: 100%;
+      height: 76px;
+      margin: 0 0 6px 0;
+
+      table-layout: fixed;
+
+      background: #102b3e;
+      border: 2px solid #315169;
       border-radius: 10px;
-      text-align: center;
-      vertical-align: middle;
+
+      color: #ffffff;
+    }
+
+    .forecast-day:last-child {
+      margin-bottom: 0;
     }
 
     .forecast-day.today {
-      background: #174260;
-      border-color: #69b8e8;
+      background: #194c6c;
+      border-color: #66b9e9;
+    }
+
+    .forecast-cell {
+      display: table-cell;
+      height: 72px;
+      vertical-align: middle;
     }
 
     .forecast-name {
+      width: 18%;
+      padding-left: 13px;
+
       font-size: 22px;
       line-height: 1;
       font-weight: 800;
-      letter-spacing: 1.5px;
+      letter-spacing: 0.7px;
+
+      text-align: left;
       color: #ffffff;
     }
 
     .forecast-date {
-      margin-top: 6px;
-      font-size: 16px;
+      width: 18%;
+
+      font-size: 17px;
       line-height: 1;
-      font-weight: 500;
-      color: #b8cad7;
+      font-weight: 600;
+
+      text-align: left;
+      color: #c1d0da;
     }
 
     .forecast-icon {
-      height: 55px;
-      margin-top: 9px;
-      font-size: 46px;
-      line-height: 55px;
+      width: 17%;
+
+      font-size: 39px;
+      line-height: 1;
+
+      text-align: center;
+      color: #ffffff;
     }
 
     .forecast-temperature {
-      margin-top: 7px;
+      width: 29%;
       white-space: nowrap;
+      text-align: center;
     }
 
     .forecast-high {
-      font-size: 31px;
+      font-size: 30px;
       line-height: 1;
       font-weight: 800;
       color: #ffffff;
     }
 
     .forecast-low {
-      margin-left: 5px;
-      font-size: 24px;
+      margin-left: 6px;
+
+      font-size: 23px;
       line-height: 1;
-      font-weight: 600;
-      color: #aebfcd;
+      font-weight: 700;
+
+      color: #b4c5d0;
     }
 
     .forecast-rain {
-      margin-top: 10px;
+      width: 18%;
+      padding-right: 13px;
+
       font-size: 17px;
       line-height: 1;
-      font-weight: 600;
-      color: #badcf0;
+      font-weight: 700;
+
+      text-align: right;
+      color: #c6e7f8;
+      white-space: nowrap;
     }
 
-    /* STATUS */
+    /*
+     * UPDATE STATUS
+     */
 
     #status {
       position: absolute;
       right: 0;
-      bottom: 10px;
+      bottom: 8px;
       left: 0;
       width: 100%;
-      text-align: center;
-      font-size: 14px;
+
+      font-size: 12px;
       line-height: 1;
-      font-weight: 500;
-      color: #8497a6;
+      font-weight: 600;
+
+      text-align: center;
+      color: #8299a9;
     }
 
     #status.error {
-      color: #ffc2c2;
+      color: #ffc4c4;
     }
 
     /*
-     * Portrait fallback.
-     * Landscape remains the recommended orientation.
+     * COMPACT MODE
+     *
+     * Used when Safari or standalone mode provides
+     * less vertical space than the full 1024 px.
      */
 
-    @media screen and (orientation: portrait) {
+    @media screen and (max-height: 960px) {
+
       #header {
-        height: 145px;
-        padding-top: 24px;
+        top: 8px;
+        height: 97px;
       }
 
       #clock {
-        font-size: 74px;
+        font-size: 70px;
       }
 
       #date {
-        font-size: 23px;
-      }
-
-      #current-section {
-        height: 315px;
-      }
-
-      #location {
+        margin-top: 8px;
         font-size: 22px;
       }
 
-      #current-weather {
-        height: 125px;
+      #current {
+        top: 112px;
+        height: 190px;
       }
 
-      #weather-icon {
-        font-size: 73px;
-        line-height: 125px;
+      #location {
+        font-size: 20px;
+      }
+
+      #current-line {
+        height: 108px;
+      }
+
+      #current-icon {
+        font-size: 65px;
+        line-height: 108px;
       }
 
       #temperature {
-        font-size: 117px;
-        line-height: 125px;
+        font-size: 108px;
+        line-height: 108px;
       }
 
       #temperature-unit {
-        font-size: 37px;
+        font-size: 33px;
       }
 
       #condition {
-        font-size: 29px;
+        font-size: 27px;
       }
 
-      #details {
-        width: 94%;
-        border-spacing: 5px 0;
+      #details-wrap {
+        top: 305px;
+        height: 142px;
+      }
+
+      .detail {
+        height: 64px;
+        margin-top: 3px;
+        margin-bottom: 3px;
       }
 
       .detail-label {
-        font-size: 13px;
-      }
-
-      .detail-value {
-        font-size: 20px;
-      }
-
-      #forecast {
-        display: block;
-        position: absolute;
-        top: 465px;
-        right: 20px;
-        bottom: auto;
-        left: 20px;
-        height: auto;
-      }
-
-      .forecast-day {
-        display: block;
-        width: 100%;
-        height: 91px;
-        margin-bottom: 7px;
-        padding: 8px 14px;
-        text-align: left;
-        white-space: nowrap;
-      }
-
-      .forecast-name,
-      .forecast-date,
-      .forecast-icon,
-      .forecast-temperature,
-      .forecast-rain {
-        display: inline-block;
-        margin-top: 0;
-        vertical-align: middle;
-      }
-
-      .forecast-name {
-        width: 18%;
-        font-size: 20px;
-      }
-
-      .forecast-date {
-        width: 17%;
         font-size: 15px;
       }
 
-      .forecast-icon {
-        width: 17%;
-        height: auto;
-        font-size: 38px;
-        line-height: 70px;
-        text-align: center;
+      .detail-value {
+        font-size: 23px;
       }
 
-      .forecast-temperature {
-        width: 26%;
-        text-align: center;
+      #forecast-title {
+        top: 462px;
+      }
+
+      #forecast-wrap {
+        top: 489px;
+        height: 383px;
+      }
+
+      .forecast-day {
+        height: 72px;
+        margin-bottom: 5px;
+      }
+
+      .forecast-cell {
+        height: 68px;
+      }
+
+      .forecast-name {
+        font-size: 21px;
+      }
+
+      .forecast-date {
+        font-size: 16px;
+      }
+
+      .forecast-icon {
+        font-size: 36px;
+      }
+
+      .forecast-high {
+        font-size: 28px;
+      }
+
+      .forecast-low {
+        font-size: 21px;
       }
 
       .forecast-rain {
-        width: 17%;
         font-size: 16px;
-        text-align: right;
       }
 
       #status {
-        display: none;
+        bottom: 6px;
       }
     }
   </style>
@@ -395,78 +496,102 @@
 
 <body>
 
-  <div id="header">
-    <div id="clock">--:--</div>
-    <div id="date">Loading date…</div>
-  </div>
+  <div id="app">
 
-  <div id="current-section">
-
-    <div id="location">Paris</div>
-
-    <div id="current-weather">
-      <span id="weather-icon">•</span>
-      <span id="temperature">--</span>
-      <span id="temperature-unit">°C</span>
+    <div id="header">
+      <div id="clock">--:--</div>
+      <div id="date">Loading date…</div>
     </div>
 
-    <div id="condition">Loading weather…</div>
+    <div id="current">
+      <div id="location">Paris</div>
 
-    <div id="details">
-
-      <div class="detail">
-        <span class="detail-label">Feels like</span>
-        <span class="detail-value">
-          <span id="apparent">--</span> °C
-        </span>
+      <div id="current-line">
+        <span id="current-icon">•</span>
+        <span id="temperature">--</span>
+        <span id="temperature-unit">°C</span>
       </div>
 
-      <div class="detail">
-        <span class="detail-label">High / Low</span>
-        <span class="detail-value">
-          <span id="maximum">--</span>° /
-          <span id="minimum">--</span>°
-        </span>
-      </div>
+      <div id="condition">Loading weather…</div>
+    </div>
 
-      <div class="detail">
-        <span class="detail-label">Rain</span>
-        <span class="detail-value">
-          <span id="rain">--</span>%
-        </span>
-      </div>
+    <div id="details-wrap">
+      <div id="details">
 
-      <div class="detail">
-        <span class="detail-label">Wind</span>
-        <span class="detail-value">
-          <span id="wind">--</span> km/h
-        </span>
-      </div>
+        <div class="detail">
+          <span class="detail-label">FEELS LIKE</span>
+          <span class="detail-value">
+            <span id="apparent">--</span> °C
+          </span>
+        </div>
 
+        <div class="detail">
+          <span class="detail-label">HIGH / LOW</span>
+          <span class="detail-value">
+            <span id="maximum">--</span>° /
+            <span id="minimum">--</span>°
+          </span>
+        </div>
+
+        <div class="detail">
+          <span class="detail-label">RAIN</span>
+          <span class="detail-value">
+            <span id="rain">--</span>%
+          </span>
+        </div>
+
+        <div class="detail">
+          <span class="detail-label">WIND</span>
+          <span class="detail-value">
+            <span id="wind">--</span> km/h
+          </span>
+        </div>
+
+      </div>
+    </div>
+
+    <div id="forecast-title">
+      5-DAY FORECAST
+    </div>
+
+    <div id="forecast-wrap">
+      <div id="forecast"></div>
+    </div>
+
+    <div id="status">
+      Initialising…
     </div>
 
   </div>
-
-  <div id="forecast"></div>
-
-  <div id="status">Initialising…</div>
 
   <script type="text/javascript">
 
     /*
-     * LOCATION
+     * BASIC SETTINGS
      */
 
     var CITY = "Paris";
-    var LATITUDE = 48.8566;
-    var LONGITUDE = 2.3522;
 
     /*
-     * Weather refresh interval: 2 hours
+     * GitHub Actions updates weather-data.js
+     * every two hours.
+     *
+     * The iPad checks for a newer copy
+     * every thirty minutes.
      */
 
     var WEATHER_REFRESH_INTERVAL =
-      2 * 60 * 60 * 1000;
+      30 * 60 * 1000;
+
+    var WEATHER_DATA_FILE =
+      "weather-data.js";
+
+    var WEATHER_CACHE_KEY =
+      "ipadWeatherPortraitV1";
+
+    /*
+     * DATE LABELS
+     */
 
     var DAYS_FULL = [
       "Sunday",
@@ -518,8 +643,14 @@
       "Dec"
     ];
 
+    /*
+     * BASIC HELPERS
+     */
+
     function pad(number) {
-      return number < 10 ? "0" + number : number;
+      return number < 10
+        ? "0" + number
+        : number;
     }
 
     function rounded(value) {
@@ -534,11 +665,6 @@
       return Math.round(Number(value));
     }
 
-    /*
-     * Parse YYYY-MM-DD without relying on
-     * newer browser date parsing behaviour.
-     */
-
     function parseDateString(dateString) {
       var parts = dateString.split("-");
 
@@ -548,6 +674,37 @@
         Number(parts[2])
       );
     }
+
+    function parseUtcDate(value) {
+      var match;
+
+      if (!value) {
+        return null;
+      }
+
+      match =
+        /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})Z$/
+        .exec(value);
+
+      if (!match) {
+        return null;
+      }
+
+      return new Date(
+        Date.UTC(
+          Number(match[1]),
+          Number(match[2]) - 1,
+          Number(match[3]),
+          Number(match[4]),
+          Number(match[5]),
+          Number(match[6])
+        )
+      );
+    }
+
+    /*
+     * CLOCK AND DATE
+     */
 
     function updateClock() {
       var now = new Date();
@@ -568,7 +725,7 @@
     }
 
     /*
-     * WMO weather-code descriptions.
+     * WMO WEATHER CODES
      */
 
     function getWeatherDescription(code, isDay) {
@@ -657,12 +814,37 @@
       };
     }
 
+    /*
+     * STATUS
+     */
+
     function updateStatus(text, isError) {
-      var status = document.getElementById("status");
+      var status =
+        document.getElementById("status");
 
       status.innerHTML = text;
-      status.className = isError ? "error" : "";
+      status.className =
+        isError ? "error" : "";
     }
+
+    function getSourceUpdateLabel(data) {
+      var generated =
+        parseUtcDate(data.generated_at_utc);
+
+      if (!generated) {
+        return "";
+      }
+
+      return (
+        pad(generated.getHours()) +
+        ":" +
+        pad(generated.getMinutes())
+      );
+    }
+
+    /*
+     * FIVE-DAY FORECAST
+     */
 
     function renderForecast(daily) {
       var forecast =
@@ -677,6 +859,7 @@
         !daily.time ||
         daily.time.length < count
       ) {
+        forecast.innerHTML = "";
         return;
       }
 
@@ -695,24 +878,31 @@
             ? "forecast-day today"
             : "forecast-day";
 
-        html +=
-          '<div class="' + cardClass + '">' +
+        var dayLabel =
+          i === 0
+            ? "TODAY"
+            : DAYS_SHORT[date.getDay()];
 
-            '<div class="forecast-name">' +
-              DAYS_SHORT[date.getDay()] +
+        html +=
+          '<div class="' +
+            cardClass +
+          '">' +
+
+            '<div class="forecast-cell forecast-name">' +
+              dayLabel +
             '</div>' +
 
-            '<div class="forecast-date">' +
+            '<div class="forecast-cell forecast-date">' +
               date.getDate() +
               " " +
               MONTHS_SHORT[date.getMonth()] +
             '</div>' +
 
-            '<div class="forecast-icon">' +
+            '<div class="forecast-cell forecast-icon">' +
               description.icon +
             '</div>' +
 
-            '<div class="forecast-temperature">' +
+            '<div class="forecast-cell forecast-temperature">' +
               '<span class="forecast-high">' +
                 rounded(
                   daily.temperature_2m_max[i]
@@ -728,7 +918,7 @@
               '</span>' +
             '</div>' +
 
-            '<div class="forecast-rain">' +
+            '<div class="forecast-cell forecast-rain">' +
               "☂ " +
               rounded(
                 daily.precipitation_probability_max[i]
@@ -742,9 +932,16 @@
       forecast.innerHTML = html;
     }
 
+    /*
+     * RENDER WEATHER
+     */
+
     function renderWeather(data, fromCache) {
-      var current = data.current || {};
-      var daily = data.daily || {};
+      var current =
+        data.current || {};
+
+      var daily =
+        data.daily || {};
 
       var isDay =
         Number(current.is_day) === 1;
@@ -758,7 +955,7 @@
       document.getElementById("location").innerHTML =
         CITY;
 
-      document.getElementById("weather-icon").innerHTML =
+      document.getElementById("current-icon").innerHTML =
         description.icon;
 
       document.getElementById("condition").innerHTML =
@@ -778,7 +975,9 @@
         daily.temperature_2m_max.length > 0
       ) {
         document.getElementById("maximum").innerHTML =
-          rounded(daily.temperature_2m_max[0]);
+          rounded(
+            daily.temperature_2m_max[0]
+          );
       }
 
       if (
@@ -786,7 +985,9 @@
         daily.temperature_2m_min.length > 0
       ) {
         document.getElementById("minimum").innerHTML =
-          rounded(daily.temperature_2m_min[0]);
+          rounded(
+            daily.temperature_2m_min[0]
+          );
       }
 
       if (
@@ -801,30 +1002,39 @@
 
       renderForecast(daily);
 
-      var now = new Date();
-      var prefix = fromCache
-        ? "Saved weather data"
-        : "Weather updated";
+      var sourceTime =
+        getSourceUpdateLabel(data);
 
-      updateStatus(
-        prefix +
-        " at " +
-        pad(now.getHours()) +
-        ":" +
-        pad(now.getMinutes()),
-        false
-      );
+      if (fromCache) {
+        updateStatus(
+          sourceTime
+            ? "Offline copy · source " + sourceTime
+            : "Offline copy",
+          false
+        );
+      } else {
+        updateStatus(
+          sourceTime
+            ? "Forecast updated at " + sourceTime
+            : "Forecast updated",
+          false
+        );
+      }
     }
 
-    function saveWeatherCache(responseText) {
+    /*
+     * LOCAL CACHE
+     */
+
+    function saveWeatherCache(weatherText) {
       try {
         window.localStorage.setItem(
-          "ipadWeatherCacheEnglish",
-          responseText
+          WEATHER_CACHE_KEY,
+          weatherText
         );
       } catch (error) {
         /*
-         * Local storage may be unavailable
+         * Local storage can be unavailable
          * in private browsing.
          */
       }
@@ -834,7 +1044,7 @@
       try {
         var cached =
           window.localStorage.getItem(
-            "ipadWeatherCacheEnglish"
+            WEATHER_CACHE_KEY
           );
 
         if (cached) {
@@ -847,66 +1057,87 @@
         }
       } catch (error) {
         /*
-         * No usable saved data.
+         * No usable cached data.
          */
       }
 
       return false;
     }
 
+    /*
+     * LOAD SAME-ORIGIN WEATHER DATA
+     */
+
     function loadWeather() {
       updateStatus(
-        "Updating weather…",
+        "Checking for weather updates…",
         false
       );
 
-      var url =
-        "https://api.open-meteo.com/v1/forecast" +
-        "?latitude=" +
-          encodeURIComponent(LATITUDE) +
-        "&longitude=" +
-          encodeURIComponent(LONGITUDE) +
-        "&current=" +
-          "temperature_2m," +
-          "apparent_temperature," +
-          "weather_code," +
-          "wind_speed_10m," +
-          "is_day" +
-        "&daily=" +
-          "weather_code," +
-          "temperature_2m_max," +
-          "temperature_2m_min," +
-          "precipitation_probability_max" +
-        "&temperature_unit=celsius" +
-        "&wind_speed_unit=kmh" +
-        "&timezone=Europe%2FParis" +
-        "&forecast_days=5" +
-        "&_=" +
-          new Date().getTime();
+      var previousLoader =
+        document.getElementById(
+          "weather-data-loader"
+        );
 
-      var request = new XMLHttpRequest();
+      if (
+        previousLoader &&
+        previousLoader.parentNode
+      ) {
+        previousLoader.parentNode.removeChild(
+          previousLoader
+        );
+      }
 
-      request.open("GET", url, true);
+      window.WEATHER_DATA = null;
 
-      request.onreadystatechange = function () {
-        if (request.readyState !== 4) {
+      var loader =
+        document.createElement("script");
+
+      loader.id =
+        "weather-data-loader";
+
+      loader.type =
+        "text/javascript";
+
+      loader.src =
+        WEATHER_DATA_FILE +
+        "?_=" +
+        new Date().getTime();
+
+      var completed = false;
+      var timeoutId;
+
+      function finishLoading() {
+        if (completed) {
           return;
         }
 
         if (
-          request.status >= 200 &&
-          request.status < 300
+          loader.readyState &&
+          loader.readyState !== "loaded" &&
+          loader.readyState !== "complete"
         ) {
-          try {
-            var data =
-              JSON.parse(request.responseText);
+          return;
+        }
 
-            saveWeatherCache(
-              request.responseText
-            );
+        completed = true;
+
+        window.clearTimeout(timeoutId);
+
+        loader.onload = null;
+        loader.onreadystatechange = null;
+
+        if (window.WEATHER_DATA) {
+          try {
+            var weatherText =
+              JSON.stringify(
+                window.WEATHER_DATA
+              );
+
+            saveWeatherCache(weatherText);
 
             renderWeather(
-              data,
+              window.WEATHER_DATA,
               false
             );
           } catch (error) {
@@ -923,49 +1154,78 @@
 
         if (!loadWeatherCache()) {
           updateStatus(
-            "Weather service unavailable",
-            true
-          );
-        }
-      };
-
-      request.onerror = function () {
-        if (!loadWeatherCache()) {
-          updateStatus(
-            "No weather connection",
-            true
-          );
-        }
-      };
-
-      try {
-        request.send(null);
-      } catch (error) {
-        if (!loadWeatherCache()) {
-          updateStatus(
-            "Weather connection error",
+            "Weather data unavailable",
             true
           );
         }
       }
+
+      loader.onload =
+        finishLoading;
+
+      loader.onreadystatechange =
+        finishLoading;
+
+      loader.onerror = function () {
+        if (completed) {
+          return;
+        }
+
+        completed = true;
+
+        window.clearTimeout(timeoutId);
+
+        if (!loadWeatherCache()) {
+          updateStatus(
+            "Unable to load weather data",
+            true
+          );
+        }
+      };
+
+      timeoutId =
+        window.setTimeout(
+          function () {
+            if (completed) {
+              return;
+            }
+
+            completed = true;
+
+            if (!loadWeatherCache()) {
+              updateStatus(
+                "Weather request timed out",
+                true
+              );
+            }
+          },
+          15000
+        );
+
+      document
+        .getElementsByTagName("head")[0]
+        .appendChild(loader);
     }
+
+    /*
+     * START
+     */
 
     function startDashboard() {
       updateClock();
-      loadWeather();
 
       /*
-       * Update time every 30 seconds.
+       * Show saved data immediately if available,
+       * then request the current same-origin file.
        */
+
+      loadWeatherCache();
+      loadWeather();
 
       window.setInterval(
         updateClock,
         30 * 1000
       );
-
-      /*
-       * Update weather every 2 hours.
-       */
 
       window.setInterval(
         loadWeather,
