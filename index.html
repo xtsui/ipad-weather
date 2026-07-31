@@ -1,0 +1,587 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1,
+             maximum-scale=1, user-scalable=no">
+
+  <!-- 从主屏幕打开时尽量全屏 -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+  <!-- 每六小时完整重新加载页面，防止旧 Safari 长时间运行失效 -->
+  <meta http-equiv="refresh" content="21600">
+
+  <title>Météo</title>
+
+  <style>
+    html,
+    body {
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      overflow: hidden;
+      background: #0b1826;
+      color: #ffffff;
+      font-family:
+        -apple-system,
+        "Helvetica Neue",
+        Arial,
+        sans-serif;
+    }
+
+    body.day {
+      background: #245f86;
+    }
+
+    body.night {
+      background: #0b1826;
+    }
+
+    #dashboard {
+      width: 92%;
+      margin: 0 auto;
+      padding-top: 34px;
+      text-align: center;
+    }
+
+    #clock {
+      font-size: 92px;
+      line-height: 1;
+      font-weight: 200;
+      letter-spacing: 3px;
+    }
+
+    #date {
+      margin-top: 12px;
+      font-size: 29px;
+      font-weight: 300;
+      opacity: 0.9;
+    }
+
+    #location {
+      margin-top: 36px;
+      font-size: 21px;
+      letter-spacing: 5px;
+      text-transform: uppercase;
+      opacity: 0.8;
+    }
+
+    #current-weather {
+      margin-top: 14px;
+      white-space: nowrap;
+    }
+
+    #weather-icon {
+      display: inline-block;
+      margin-right: 24px;
+      font-size: 90px;
+      vertical-align: middle;
+    }
+
+    #temperature {
+      display: inline-block;
+      font-size: 132px;
+      line-height: 1;
+      font-weight: 200;
+      vertical-align: middle;
+    }
+
+    #temperature-unit {
+      display: inline-block;
+      margin-left: 5px;
+      font-size: 42px;
+      font-weight: 300;
+      vertical-align: top;
+      padding-top: 18px;
+    }
+
+    #condition {
+      margin-top: 12px;
+      font-size: 31px;
+      font-weight: 300;
+    }
+
+    #details {
+      margin-top: 30px;
+      font-size: 23px;
+      line-height: 1.7;
+    }
+
+    .detail {
+      display: inline-block;
+      margin: 0 15px;
+      white-space: nowrap;
+    }
+
+    #status {
+      position: absolute;
+      bottom: 17px;
+      left: 0;
+      width: 100%;
+      text-align: center;
+      font-size: 15px;
+      opacity: 0.55;
+    }
+
+    #status.error {
+      color: #ffd2d2;
+      opacity: 0.9;
+    }
+
+    @media screen and (orientation: portrait) {
+      #dashboard {
+        padding-top: 65px;
+      }
+
+      #clock {
+        font-size: 82px;
+      }
+
+      #current-weather {
+        margin-top: 35px;
+      }
+
+      #temperature {
+        font-size: 122px;
+      }
+
+      #details {
+        width: 80%;
+        margin: 40px auto 0;
+      }
+
+      .detail {
+        display: block;
+        margin: 8px 0;
+      }
+    }
+  </style>
+</head>
+
+<body class="night">
+
+  <div id="dashboard">
+
+    <div id="clock">--:--</div>
+    <div id="date">Chargement…</div>
+
+    <div id="location">Paris</div>
+
+    <div id="current-weather">
+      <span id="weather-icon">•</span>
+      <span id="temperature">--</span>
+      <span id="temperature-unit">°C</span>
+    </div>
+
+    <div id="condition">Chargement de la météo…</div>
+
+    <div id="details">
+      <span class="detail">
+        Ressenti : <span id="apparent">--</span> °C
+      </span>
+
+      <span class="detail">
+        Max / Min : <span id="maximum">--</span>° /
+        <span id="minimum">--</span>°
+      </span>
+
+      <span class="detail">
+        Pluie : <span id="rain">--</span> %
+      </span>
+
+      <span class="detail">
+        Vent : <span id="wind">--</span> km/h
+      </span>
+    </div>
+
+  </div>
+
+  <div id="status">Initialisation…</div>
+
+  <script type="text/javascript">
+
+    /*
+     * PARAMÈTRES À MODIFIER
+     */
+
+    var CITY = "Paris";
+    var LATITUDE = 48.8566;
+    var LONGITUDE = 2.3522;
+
+    /*
+     * Deux heures en millisecondes.
+     * Pour une heure : 60 * 60 * 1000
+     * Pour trois heures : 3 * 60 * 60 * 1000
+     */
+
+    var WEATHER_REFRESH_INTERVAL =
+      2 * 60 * 60 * 1000;
+
+    var DAYS = [
+      "dimanche",
+      "lundi",
+      "mardi",
+      "mercredi",
+      "jeudi",
+      "vendredi",
+      "samedi"
+    ];
+
+    var MONTHS = [
+      "janvier",
+      "février",
+      "mars",
+      "avril",
+      "mai",
+      "juin",
+      "juillet",
+      "août",
+      "septembre",
+      "octobre",
+      "novembre",
+      "décembre"
+    ];
+
+    function pad(number) {
+      return number < 10 ? "0" + number : number;
+    }
+
+    function updateClock() {
+      var now = new Date();
+      var hours = now.getHours();
+      var minutes = now.getMinutes();
+
+      document.getElementById("clock").innerHTML =
+        pad(hours) + ":" + pad(minutes);
+
+      document.getElementById("date").innerHTML =
+        DAYS[now.getDay()] +
+        " " +
+        now.getDate() +
+        " " +
+        MONTHS[now.getMonth()] +
+        " " +
+        now.getFullYear();
+
+      if (hours >= 7 && hours < 20) {
+        document.body.className = "day";
+      } else {
+        document.body.className = "night";
+      }
+    }
+
+    function getWeatherDescription(code) {
+      code = Number(code);
+
+      if (code === 0) {
+        return {
+          icon: "☀",
+          text: "Ensoleillé"
+        };
+      }
+
+      if (code === 1) {
+        return {
+          icon: "☀",
+          text: "Peu nuageux"
+        };
+      }
+
+      if (code === 2) {
+        return {
+          icon: "☁",
+          text: "Partiellement nuageux"
+        };
+      }
+
+      if (code === 3) {
+        return {
+          icon: "☁",
+          text: "Couvert"
+        };
+      }
+
+      if (code === 45 || code === 48) {
+        return {
+          icon: "≋",
+          text: "Brouillard"
+        };
+      }
+
+      if (code >= 51 && code <= 57) {
+        return {
+          icon: "☂",
+          text: "Bruine"
+        };
+      }
+
+      if (code >= 61 && code <= 67) {
+        return {
+          icon: "☂",
+          text: "Pluie"
+        };
+      }
+
+      if (code >= 71 && code <= 77) {
+        return {
+          icon: "❄",
+          text: "Neige"
+        };
+      }
+
+      if (code >= 80 && code <= 82) {
+        return {
+          icon: "☂",
+          text: "Averses"
+        };
+      }
+
+      if (code >= 85 && code <= 86) {
+        return {
+          icon: "❄",
+          text: "Averses de neige"
+        };
+      }
+
+      if (code >= 95 && code <= 99) {
+        return {
+          icon: "⚡",
+          text: "Orage"
+        };
+      }
+
+      return {
+        icon: "•",
+        text: "Conditions variables"
+      };
+    }
+
+    function rounded(value) {
+      if (
+        value === null ||
+        typeof value === "undefined" ||
+        isNaN(Number(value))
+      ) {
+        return "--";
+      }
+
+      return Math.round(Number(value));
+    }
+
+    function updateStatus(text, isError) {
+      var status = document.getElementById("status");
+
+      status.innerHTML = text;
+      status.className = isError ? "error" : "";
+    }
+
+    function renderWeather(data, fromCache) {
+      var current = data.current || {};
+      var daily = data.daily || {};
+
+      var description =
+        getWeatherDescription(current.weather_code);
+
+      document.getElementById("location").innerHTML = CITY;
+
+      document.getElementById("weather-icon").innerHTML =
+        description.icon;
+
+      document.getElementById("condition").innerHTML =
+        description.text;
+
+      document.getElementById("temperature").innerHTML =
+        rounded(current.temperature_2m);
+
+      document.getElementById("apparent").innerHTML =
+        rounded(current.apparent_temperature);
+
+      document.getElementById("wind").innerHTML =
+        rounded(current.wind_speed_10m);
+
+      if (
+        daily.temperature_2m_max &&
+        daily.temperature_2m_max.length > 0
+      ) {
+        document.getElementById("maximum").innerHTML =
+          rounded(daily.temperature_2m_max[0]);
+      }
+
+      if (
+        daily.temperature_2m_min &&
+        daily.temperature_2m_min.length > 0
+      ) {
+        document.getElementById("minimum").innerHTML =
+          rounded(daily.temperature_2m_min[0]);
+      }
+
+      if (
+        daily.precipitation_probability_max &&
+        daily.precipitation_probability_max.length > 0
+      ) {
+        document.getElementById("rain").innerHTML =
+          rounded(daily.precipitation_probability_max[0]);
+      }
+
+      var now = new Date();
+
+      if (fromCache) {
+        updateStatus(
+          "Dernières données enregistrées · " +
+          pad(now.getHours()) +
+          ":" +
+          pad(now.getMinutes()),
+          false
+        );
+      } else {
+        updateStatus(
+          "Mise à jour météo : " +
+          pad(now.getHours()) +
+          ":" +
+          pad(now.getMinutes()),
+          false
+        );
+      }
+    }
+
+    function saveWeatherCache(responseText) {
+      try {
+        window.localStorage.setItem(
+          "ipadWeatherCache",
+          responseText
+        );
+      } catch (error) {
+        /*
+         * Certains anciens Safari peuvent bloquer
+         * localStorage en navigation privée.
+         */
+      }
+    }
+
+    function loadWeatherCache() {
+      try {
+        var cached =
+          window.localStorage.getItem("ipadWeatherCache");
+
+        if (cached) {
+          renderWeather(JSON.parse(cached), true);
+          return true;
+        }
+      } catch (error) {
+        /*
+         * Aucun cache utilisable.
+         */
+      }
+
+      return false;
+    }
+
+    function loadWeather() {
+      updateStatus("Actualisation de la météo…", false);
+
+      var url =
+        "https://api.open-meteo.com/v1/forecast" +
+        "?latitude=" + encodeURIComponent(LATITUDE) +
+        "&longitude=" + encodeURIComponent(LONGITUDE) +
+        "&current=" +
+          "temperature_2m," +
+          "apparent_temperature," +
+          "weather_code," +
+          "wind_speed_10m" +
+        "&daily=" +
+          "temperature_2m_max," +
+          "temperature_2m_min," +
+          "precipitation_probability_max" +
+        "&timezone=auto" +
+        "&forecast_days=1" +
+        "&_=" + new Date().getTime();
+
+      var request = new XMLHttpRequest();
+
+      request.open("GET", url, true);
+
+      request.onreadystatechange = function () {
+        if (request.readyState !== 4) {
+          return;
+        }
+
+        if (request.status >= 200 && request.status < 300) {
+          try {
+            var data = JSON.parse(request.responseText);
+
+            saveWeatherCache(request.responseText);
+            renderWeather(data, false);
+          } catch (error) {
+            if (!loadWeatherCache()) {
+              updateStatus(
+                "Données météo illisibles",
+                true
+              );
+            }
+          }
+
+          return;
+        }
+
+        if (!loadWeatherCache()) {
+          updateStatus(
+            "Impossible de charger la météo",
+            true
+          );
+        }
+      };
+
+      request.onerror = function () {
+        if (!loadWeatherCache()) {
+          updateStatus(
+            "Connexion météo indisponible",
+            true
+          );
+        }
+      };
+
+      try {
+        request.send(null);
+      } catch (error) {
+        if (!loadWeatherCache()) {
+          updateStatus(
+            "Erreur de connexion météo",
+            true
+          );
+        }
+      }
+    }
+
+    function startDashboard() {
+      updateClock();
+      loadWeather();
+
+      /*
+       * L'heure et la date sont recalculées toutes les 30 secondes.
+       */
+
+      window.setInterval(
+        updateClock,
+        30 * 1000
+      );
+
+      /*
+       * Les données météo sont récupérées toutes les deux heures.
+       */
+
+      window.setInterval(
+        loadWeather,
+        WEATHER_REFRESH_INTERVAL
+      );
+    }
+
+    startDashboard();
+
+  </script>
+
+</body>
+</html>
