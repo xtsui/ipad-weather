@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="fr">
+<html lang="en">
 <head>
   <meta charset="utf-8">
 
@@ -8,166 +8,399 @@
     content="width=device-width, initial-scale=1,
              maximum-scale=1, user-scalable=no">
 
-  <!-- 从主屏幕打开时尽量全屏 -->
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
 
-  <!-- 每六小时完整重新加载页面，防止旧 Safari 长时间运行失效 -->
+  <!-- Complete reload every 6 hours -->
   <meta http-equiv="refresh" content="21600">
 
-  <title>Météo</title>
+  <title>Paris Weather</title>
 
   <style>
+    * {
+      box-sizing: border-box;
+    }
+
     html,
     body {
       width: 100%;
       height: 100%;
       margin: 0;
       overflow: hidden;
-      background: #0b1826;
+      background: #071725;
       color: #ffffff;
       font-family:
         -apple-system,
+        BlinkMacSystemFont,
         "Helvetica Neue",
         Arial,
         sans-serif;
     }
 
-    body.day {
-      background: #245f86;
+    body {
+      position: relative;
     }
 
-    body.night {
-      background: #0b1826;
-    }
+    /* TOP SECTION */
 
-    #dashboard {
-      width: 92%;
-      margin: 0 auto;
-      padding-top: 34px;
+    #header {
+      width: 100%;
+      height: 150px;
+      padding-top: 18px;
       text-align: center;
     }
 
     #clock {
-      font-size: 92px;
-      line-height: 1;
-      font-weight: 200;
-      letter-spacing: 3px;
+      font-size: 88px;
+      line-height: 0.95;
+      font-weight: 300;
+      letter-spacing: 2px;
     }
 
     #date {
-      margin-top: 12px;
-      font-size: 29px;
-      font-weight: 300;
-      opacity: 0.9;
+      margin-top: 13px;
+      font-size: 27px;
+      line-height: 1.15;
+      font-weight: 500;
+      letter-spacing: 0.3px;
+      color: #e6eef5;
+    }
+
+    /* CURRENT WEATHER */
+
+    #current-section {
+      width: 100%;
+      height: 330px;
+      padding-top: 5px;
+      text-align: center;
     }
 
     #location {
-      margin-top: 36px;
-      font-size: 21px;
-      letter-spacing: 5px;
+      font-size: 25px;
+      line-height: 1;
+      font-weight: 700;
+      letter-spacing: 7px;
       text-transform: uppercase;
-      opacity: 0.8;
+      color: #dce9f3;
     }
 
     #current-weather {
-      margin-top: 14px;
+      margin-top: 13px;
+      height: 145px;
       white-space: nowrap;
     }
 
     #weather-icon {
       display: inline-block;
-      margin-right: 24px;
+      margin-right: 23px;
       font-size: 90px;
+      line-height: 145px;
       vertical-align: middle;
     }
 
     #temperature {
       display: inline-block;
-      font-size: 132px;
-      line-height: 1;
-      font-weight: 200;
+      font-size: 142px;
+      line-height: 145px;
+      font-weight: 300;
       vertical-align: middle;
     }
 
     #temperature-unit {
       display: inline-block;
-      margin-left: 5px;
-      font-size: 42px;
-      font-weight: 300;
+      margin-left: 6px;
+      padding-top: 16px;
+      font-size: 44px;
+      line-height: 1;
+      font-weight: 400;
       vertical-align: top;
-      padding-top: 18px;
     }
 
     #condition {
-      margin-top: 12px;
-      font-size: 31px;
-      font-weight: 300;
+      margin-top: 4px;
+      font-size: 34px;
+      line-height: 1.15;
+      font-weight: 500;
+      color: #ffffff;
     }
 
     #details {
-      margin-top: 30px;
-      font-size: 23px;
-      line-height: 1.7;
+      display: table;
+      width: 92%;
+      max-width: 980px;
+      margin: 26px auto 0;
+      table-layout: fixed;
+      border-collapse: separate;
+      border-spacing: 8px 0;
     }
 
     .detail {
-      display: inline-block;
-      margin: 0 15px;
+      display: table-cell;
+      padding: 10px 5px;
+      background: #10283a;
+      border: 1px solid #29465b;
+      border-radius: 8px;
+      text-align: center;
+      vertical-align: middle;
+    }
+
+    .detail-label {
+      display: block;
+      margin-bottom: 4px;
+      font-size: 17px;
+      line-height: 1;
+      font-weight: 600;
+      color: #aebfcd;
+      text-transform: uppercase;
+      letter-spacing: 0.7px;
+    }
+
+    .detail-value {
+      display: block;
+      font-size: 25px;
+      line-height: 1.1;
+      font-weight: 700;
+      color: #ffffff;
       white-space: nowrap;
     }
 
+    /* FIVE-DAY FORECAST */
+
+    #forecast {
+      display: table;
+      position: absolute;
+      right: 18px;
+      bottom: 38px;
+      left: 18px;
+      width: auto;
+      height: 220px;
+      table-layout: fixed;
+      border-collapse: separate;
+      border-spacing: 8px 0;
+    }
+
+    .forecast-day {
+      display: table-cell;
+      width: 20%;
+      padding: 13px 5px 11px;
+      background: #10283a;
+      border: 2px solid #29465b;
+      border-radius: 10px;
+      text-align: center;
+      vertical-align: middle;
+    }
+
+    .forecast-day.today {
+      background: #174260;
+      border-color: #69b8e8;
+    }
+
+    .forecast-name {
+      font-size: 22px;
+      line-height: 1;
+      font-weight: 800;
+      letter-spacing: 1.5px;
+      color: #ffffff;
+    }
+
+    .forecast-date {
+      margin-top: 6px;
+      font-size: 16px;
+      line-height: 1;
+      font-weight: 500;
+      color: #b8cad7;
+    }
+
+    .forecast-icon {
+      height: 55px;
+      margin-top: 9px;
+      font-size: 46px;
+      line-height: 55px;
+    }
+
+    .forecast-temperature {
+      margin-top: 7px;
+      white-space: nowrap;
+    }
+
+    .forecast-high {
+      font-size: 31px;
+      line-height: 1;
+      font-weight: 800;
+      color: #ffffff;
+    }
+
+    .forecast-low {
+      margin-left: 5px;
+      font-size: 24px;
+      line-height: 1;
+      font-weight: 600;
+      color: #aebfcd;
+    }
+
+    .forecast-rain {
+      margin-top: 10px;
+      font-size: 17px;
+      line-height: 1;
+      font-weight: 600;
+      color: #badcf0;
+    }
+
+    /* STATUS */
+
     #status {
       position: absolute;
-      bottom: 17px;
+      right: 0;
+      bottom: 10px;
       left: 0;
       width: 100%;
       text-align: center;
-      font-size: 15px;
-      opacity: 0.55;
+      font-size: 14px;
+      line-height: 1;
+      font-weight: 500;
+      color: #8497a6;
     }
 
     #status.error {
-      color: #ffd2d2;
-      opacity: 0.9;
+      color: #ffc2c2;
     }
 
+    /*
+     * Portrait fallback.
+     * Landscape remains the recommended orientation.
+     */
+
     @media screen and (orientation: portrait) {
-      #dashboard {
-        padding-top: 65px;
+      #header {
+        height: 145px;
+        padding-top: 24px;
       }
 
       #clock {
-        font-size: 82px;
+        font-size: 74px;
+      }
+
+      #date {
+        font-size: 23px;
+      }
+
+      #current-section {
+        height: 315px;
+      }
+
+      #location {
+        font-size: 22px;
       }
 
       #current-weather {
-        margin-top: 35px;
+        height: 125px;
+      }
+
+      #weather-icon {
+        font-size: 73px;
+        line-height: 125px;
       }
 
       #temperature {
-        font-size: 122px;
+        font-size: 117px;
+        line-height: 125px;
+      }
+
+      #temperature-unit {
+        font-size: 37px;
+      }
+
+      #condition {
+        font-size: 29px;
       }
 
       #details {
-        width: 80%;
-        margin: 40px auto 0;
+        width: 94%;
+        border-spacing: 5px 0;
       }
 
-      .detail {
+      .detail-label {
+        font-size: 13px;
+      }
+
+      .detail-value {
+        font-size: 20px;
+      }
+
+      #forecast {
         display: block;
-        margin: 8px 0;
+        position: absolute;
+        top: 465px;
+        right: 20px;
+        bottom: auto;
+        left: 20px;
+        height: auto;
+      }
+
+      .forecast-day {
+        display: block;
+        width: 100%;
+        height: 91px;
+        margin-bottom: 7px;
+        padding: 8px 14px;
+        text-align: left;
+        white-space: nowrap;
+      }
+
+      .forecast-name,
+      .forecast-date,
+      .forecast-icon,
+      .forecast-temperature,
+      .forecast-rain {
+        display: inline-block;
+        margin-top: 0;
+        vertical-align: middle;
+      }
+
+      .forecast-name {
+        width: 18%;
+        font-size: 20px;
+      }
+
+      .forecast-date {
+        width: 17%;
+        font-size: 15px;
+      }
+
+      .forecast-icon {
+        width: 17%;
+        height: auto;
+        font-size: 38px;
+        line-height: 70px;
+        text-align: center;
+      }
+
+      .forecast-temperature {
+        width: 26%;
+        text-align: center;
+      }
+
+      .forecast-rain {
+        width: 17%;
+        font-size: 16px;
+        text-align: right;
+      }
+
+      #status {
+        display: none;
       }
     }
   </style>
 </head>
 
-<body class="night">
+<body>
 
-  <div id="dashboard">
-
+  <div id="header">
     <div id="clock">--:--</div>
-    <div id="date">Chargement…</div>
+    <div id="date">Loading date…</div>
+  </div>
+
+  <div id="current-section">
 
     <div id="location">Paris</div>
 
@@ -177,35 +410,51 @@
       <span id="temperature-unit">°C</span>
     </div>
 
-    <div id="condition">Chargement de la météo…</div>
+    <div id="condition">Loading weather…</div>
 
     <div id="details">
-      <span class="detail">
-        Ressenti : <span id="apparent">--</span> °C
-      </span>
 
-      <span class="detail">
-        Max / Min : <span id="maximum">--</span>° /
-        <span id="minimum">--</span>°
-      </span>
+      <div class="detail">
+        <span class="detail-label">Feels like</span>
+        <span class="detail-value">
+          <span id="apparent">--</span> °C
+        </span>
+      </div>
 
-      <span class="detail">
-        Pluie : <span id="rain">--</span> %
-      </span>
+      <div class="detail">
+        <span class="detail-label">High / Low</span>
+        <span class="detail-value">
+          <span id="maximum">--</span>° /
+          <span id="minimum">--</span>°
+        </span>
+      </div>
 
-      <span class="detail">
-        Vent : <span id="wind">--</span> km/h
-      </span>
+      <div class="detail">
+        <span class="detail-label">Rain</span>
+        <span class="detail-value">
+          <span id="rain">--</span>%
+        </span>
+      </div>
+
+      <div class="detail">
+        <span class="detail-label">Wind</span>
+        <span class="detail-value">
+          <span id="wind">--</span> km/h
+        </span>
+      </div>
+
     </div>
 
   </div>
 
-  <div id="status">Initialisation…</div>
+  <div id="forecast"></div>
+
+  <div id="status">Initialising…</div>
 
   <script type="text/javascript">
 
     /*
-     * PARAMÈTRES À MODIFIER
+     * LOCATION
      */
 
     var CITY = "Paris";
@@ -213,151 +462,64 @@
     var LONGITUDE = 2.3522;
 
     /*
-     * Deux heures en millisecondes.
-     * Pour une heure : 60 * 60 * 1000
-     * Pour trois heures : 3 * 60 * 60 * 1000
+     * Weather refresh interval: 2 hours
      */
 
     var WEATHER_REFRESH_INTERVAL =
       2 * 60 * 60 * 1000;
 
-    var DAYS = [
-      "dimanche",
-      "lundi",
-      "mardi",
-      "mercredi",
-      "jeudi",
-      "vendredi",
-      "samedi"
+    var DAYS_FULL = [
+      "Sunday",
+      "Monday",
+      "Tuesday",
+      "Wednesday",
+      "Thursday",
+      "Friday",
+      "Saturday"
     ];
 
-    var MONTHS = [
-      "janvier",
-      "février",
-      "mars",
-      "avril",
-      "mai",
-      "juin",
-      "juillet",
-      "août",
-      "septembre",
-      "octobre",
-      "novembre",
-      "décembre"
+    var DAYS_SHORT = [
+      "SUN",
+      "MON",
+      "TUE",
+      "WED",
+      "THU",
+      "FRI",
+      "SAT"
+    ];
+
+    var MONTHS_FULL = [
+      "January",
+      "February",
+      "March",
+      "April",
+      "May",
+      "June",
+      "July",
+      "August",
+      "September",
+      "October",
+      "November",
+      "December"
+    ];
+
+    var MONTHS_SHORT = [
+      "Jan",
+      "Feb",
+      "Mar",
+      "Apr",
+      "May",
+      "Jun",
+      "Jul",
+      "Aug",
+      "Sep",
+      "Oct",
+      "Nov",
+      "Dec"
     ];
 
     function pad(number) {
       return number < 10 ? "0" + number : number;
-    }
-
-    function updateClock() {
-      var now = new Date();
-      var hours = now.getHours();
-      var minutes = now.getMinutes();
-
-      document.getElementById("clock").innerHTML =
-        pad(hours) + ":" + pad(minutes);
-
-      document.getElementById("date").innerHTML =
-        DAYS[now.getDay()] +
-        " " +
-        now.getDate() +
-        " " +
-        MONTHS[now.getMonth()] +
-        " " +
-        now.getFullYear();
-
-      if (hours >= 7 && hours < 20) {
-        document.body.className = "day";
-      } else {
-        document.body.className = "night";
-      }
-    }
-
-    function getWeatherDescription(code) {
-      code = Number(code);
-
-      if (code === 0) {
-        return {
-          icon: "☀",
-          text: "Ensoleillé"
-        };
-      }
-
-      if (code === 1) {
-        return {
-          icon: "☀",
-          text: "Peu nuageux"
-        };
-      }
-
-      if (code === 2) {
-        return {
-          icon: "☁",
-          text: "Partiellement nuageux"
-        };
-      }
-
-      if (code === 3) {
-        return {
-          icon: "☁",
-          text: "Couvert"
-        };
-      }
-
-      if (code === 45 || code === 48) {
-        return {
-          icon: "≋",
-          text: "Brouillard"
-        };
-      }
-
-      if (code >= 51 && code <= 57) {
-        return {
-          icon: "☂",
-          text: "Bruine"
-        };
-      }
-
-      if (code >= 61 && code <= 67) {
-        return {
-          icon: "☂",
-          text: "Pluie"
-        };
-      }
-
-      if (code >= 71 && code <= 77) {
-        return {
-          icon: "❄",
-          text: "Neige"
-        };
-      }
-
-      if (code >= 80 && code <= 82) {
-        return {
-          icon: "☂",
-          text: "Averses"
-        };
-      }
-
-      if (code >= 85 && code <= 86) {
-        return {
-          icon: "❄",
-          text: "Averses de neige"
-        };
-      }
-
-      if (code >= 95 && code <= 99) {
-        return {
-          icon: "⚡",
-          text: "Orage"
-        };
-      }
-
-      return {
-        icon: "•",
-        text: "Conditions variables"
-      };
     }
 
     function rounded(value) {
@@ -372,6 +534,129 @@
       return Math.round(Number(value));
     }
 
+    /*
+     * Parse YYYY-MM-DD without relying on
+     * newer browser date parsing behaviour.
+     */
+
+    function parseDateString(dateString) {
+      var parts = dateString.split("-");
+
+      return new Date(
+        Number(parts[0]),
+        Number(parts[1]) - 1,
+        Number(parts[2])
+      );
+    }
+
+    function updateClock() {
+      var now = new Date();
+
+      document.getElementById("clock").innerHTML =
+        pad(now.getHours()) +
+        ":" +
+        pad(now.getMinutes());
+
+      document.getElementById("date").innerHTML =
+        DAYS_FULL[now.getDay()] +
+        ", " +
+        now.getDate() +
+        " " +
+        MONTHS_FULL[now.getMonth()] +
+        " " +
+        now.getFullYear();
+    }
+
+    /*
+     * WMO weather-code descriptions.
+     */
+
+    function getWeatherDescription(code, isDay) {
+      code = Number(code);
+
+      if (code === 0) {
+        return {
+          icon: isDay === false ? "☾" : "☀",
+          text: "Clear"
+        };
+      }
+
+      if (code === 1) {
+        return {
+          icon: isDay === false ? "☾" : "☀",
+          text: "Mostly clear"
+        };
+      }
+
+      if (code === 2) {
+        return {
+          icon: "☁",
+          text: "Partly cloudy"
+        };
+      }
+
+      if (code === 3) {
+        return {
+          icon: "☁",
+          text: "Overcast"
+        };
+      }
+
+      if (code === 45 || code === 48) {
+        return {
+          icon: "≋",
+          text: "Foggy"
+        };
+      }
+
+      if (code >= 51 && code <= 57) {
+        return {
+          icon: "☂",
+          text: "Drizzle"
+        };
+      }
+
+      if (code >= 61 && code <= 67) {
+        return {
+          icon: "☂",
+          text: "Rain"
+        };
+      }
+
+      if (code >= 71 && code <= 77) {
+        return {
+          icon: "❄",
+          text: "Snow"
+        };
+      }
+
+      if (code >= 80 && code <= 82) {
+        return {
+          icon: "☂",
+          text: "Rain showers"
+        };
+      }
+
+      if (code >= 85 && code <= 86) {
+        return {
+          icon: "❄",
+          text: "Snow showers"
+        };
+      }
+
+      if (code >= 95 && code <= 99) {
+        return {
+          icon: "⚡",
+          text: "Thunderstorms"
+        };
+      }
+
+      return {
+        icon: "•",
+        text: "Variable conditions"
+      };
+    }
+
     function updateStatus(text, isError) {
       var status = document.getElementById("status");
 
@@ -379,14 +664,99 @@
       status.className = isError ? "error" : "";
     }
 
+    function renderForecast(daily) {
+      var forecast =
+        document.getElementById("forecast");
+
+      var html = "";
+      var count = 5;
+      var i;
+
+      if (
+        !daily ||
+        !daily.time ||
+        daily.time.length < count
+      ) {
+        return;
+      }
+
+      for (i = 0; i < count; i++) {
+        var date =
+          parseDateString(daily.time[i]);
+
+        var description =
+          getWeatherDescription(
+            daily.weather_code[i],
+            true
+          );
+
+        var cardClass =
+          i === 0
+            ? "forecast-day today"
+            : "forecast-day";
+
+        html +=
+          '<div class="' + cardClass + '">' +
+
+            '<div class="forecast-name">' +
+              DAYS_SHORT[date.getDay()] +
+            '</div>' +
+
+            '<div class="forecast-date">' +
+              date.getDate() +
+              " " +
+              MONTHS_SHORT[date.getMonth()] +
+            '</div>' +
+
+            '<div class="forecast-icon">' +
+              description.icon +
+            '</div>' +
+
+            '<div class="forecast-temperature">' +
+              '<span class="forecast-high">' +
+                rounded(
+                  daily.temperature_2m_max[i]
+                ) +
+                "°" +
+              '</span>' +
+
+              '<span class="forecast-low">' +
+                rounded(
+                  daily.temperature_2m_min[i]
+                ) +
+                "°" +
+              '</span>' +
+            '</div>' +
+
+            '<div class="forecast-rain">' +
+              "☂ " +
+              rounded(
+                daily.precipitation_probability_max[i]
+              ) +
+              "%" +
+            '</div>' +
+
+          '</div>';
+      }
+
+      forecast.innerHTML = html;
+    }
+
     function renderWeather(data, fromCache) {
       var current = data.current || {};
       var daily = data.daily || {};
 
-      var description =
-        getWeatherDescription(current.weather_code);
+      var isDay =
+        Number(current.is_day) === 1;
 
-      document.getElementById("location").innerHTML = CITY;
+      var description =
+        getWeatherDescription(
+          current.weather_code,
+          isDay
+        );
+
+      document.getElementById("location").innerHTML =
+        CITY;
 
       document.getElementById("weather-icon").innerHTML =
         description.icon;
@@ -424,40 +794,38 @@
         daily.precipitation_probability_max.length > 0
       ) {
         document.getElementById("rain").innerHTML =
-          rounded(daily.precipitation_probability_max[0]);
+          rounded(
+            daily.precipitation_probability_max[0]
+          );
       }
+
+      renderForecast(daily);
 
       var now = new Date();
+      var prefix = fromCache
+        ? "Saved weather data"
+        : "Weather updated";
 
-      if (fromCache) {
-        updateStatus(
-          "Dernières données enregistrées · " +
-          pad(now.getHours()) +
-          ":" +
-          pad(now.getMinutes()),
-          false
-        );
-      } else {
-        updateStatus(
-          "Mise à jour météo : " +
-          pad(now.getHours()) +
-          ":" +
-          pad(now.getMinutes()),
-          false
-        );
-      }
+      updateStatus(
+        prefix +
+        " at " +
+        pad(now.getHours()) +
+        ":" +
+        pad(now.getMinutes()),
+        false
+      );
     }
 
     function saveWeatherCache(responseText) {
       try {
         window.localStorage.setItem(
-          "ipadWeatherCache",
+          "ipadWeatherCacheEnglish",
           responseText
         );
       } catch (error) {
         /*
-         * Certains anciens Safari peuvent bloquer
-         * localStorage en navigation privée.
+         * Local storage may be unavailable
+         * in private browsing.
          */
       }
     }
@@ -465,15 +833,21 @@
     function loadWeatherCache() {
       try {
         var cached =
-          window.localStorage.getItem("ipadWeatherCache");
+          window.localStorage.getItem(
+            "ipadWeatherCacheEnglish"
+          );
 
         if (cached) {
-          renderWeather(JSON.parse(cached), true);
+          renderWeather(
+            JSON.parse(cached),
+            true
+          );
+
           return true;
         }
       } catch (error) {
         /*
-         * Aucun cache utilisable.
+         * No usable saved data.
          */
       }
 
@@ -481,24 +855,34 @@
     }
 
     function loadWeather() {
-      updateStatus("Actualisation de la météo…", false);
+      updateStatus(
+        "Updating weather…",
+        false
+      );
 
       var url =
         "https://api.open-meteo.com/v1/forecast" +
-        "?latitude=" + encodeURIComponent(LATITUDE) +
-        "&longitude=" + encodeURIComponent(LONGITUDE) +
+        "?latitude=" +
+          encodeURIComponent(LATITUDE) +
+        "&longitude=" +
+          encodeURIComponent(LONGITUDE) +
         "&current=" +
           "temperature_2m," +
           "apparent_temperature," +
           "weather_code," +
-          "wind_speed_10m" +
+          "wind_speed_10m," +
+          "is_day" +
         "&daily=" +
+          "weather_code," +
           "temperature_2m_max," +
           "temperature_2m_min," +
           "precipitation_probability_max" +
-        "&timezone=auto" +
-        "&forecast_days=1" +
-        "&_=" + new Date().getTime();
+        "&temperature_unit=celsius" +
+        "&wind_speed_unit=kmh" +
+        "&timezone=Europe%2FParis" +
+        "&forecast_days=5" +
+        "&_=" +
+          new Date().getTime();
 
       var request = new XMLHttpRequest();
 
@@ -509,16 +893,26 @@
           return;
         }
 
-        if (request.status >= 200 && request.status < 300) {
+        if (
+          request.status >= 200 &&
+          request.status < 300
+        ) {
           try {
-            var data = JSON.parse(request.responseText);
+            var data =
+              JSON.parse(request.responseText);
 
-            saveWeatherCache(request.responseText);
-            renderWeather(data, false);
+            saveWeatherCache(
+              request.responseText
+            );
+
+            renderWeather(
+              data,
+              false
+            );
           } catch (error) {
             if (!loadWeatherCache()) {
               updateStatus(
-                "Données météo illisibles",
+                "Weather data could not be read",
                 true
               );
             }
@@ -529,7 +923,7 @@
 
         if (!loadWeatherCache()) {
           updateStatus(
-            "Impossible de charger la météo",
+            "Weather service unavailable",
             true
           );
         }
@@ -538,7 +932,7 @@
       request.onerror = function () {
         if (!loadWeatherCache()) {
           updateStatus(
-            "Connexion météo indisponible",
+            "No weather connection",
             true
           );
         }
@@ -549,7 +943,7 @@
       } catch (error) {
         if (!loadWeatherCache()) {
           updateStatus(
-            "Erreur de connexion météo",
+            "Weather connection error",
             true
           );
         }
@@ -561,7 +955,7 @@
       loadWeather();
 
       /*
-       * L'heure et la date sont recalculées toutes les 30 secondes.
+       * Update time every 30 seconds.
        */
 
       window.setInterval(
@@ -570,7 +964,7 @@
       );
 
       /*
-       * Les données météo sont récupérées toutes les deux heures.
+       * Update weather every 2 hours.
        */
 
       window.setInterval(
