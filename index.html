@@ -5,15 +5,14 @@
 
   <meta
     name="viewport"
-    content="width=device-width, initial-scale=1,
-    maximum-scale=1, user-scalable=no">
+    content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
   <meta name="apple-mobile-web-app-title" content="Weather">
   <meta name="format-detection" content="telephone=no">
 
-  <!-- Complete page reload every six hours -->
+  <!-- Emergency fallback reload every six hours -->
   <meta http-equiv="refresh" content="21600">
 
   <title>Paris Weather</title>
@@ -42,9 +41,10 @@
         Arial,
         sans-serif;
 
-      -webkit-text-size-adjust: 100%;
+      -webkit-text-size-adjust: none;
       -webkit-user-select: none;
       -webkit-touch-callout: none;
+      -webkit-font-smoothing: antialiased;
     }
 
     body {
@@ -55,174 +55,161 @@
       left: 0;
     }
 
-    #app {
+    /*
+     * Fixed portrait artboard.
+     *
+     * The JavaScript scales this complete 768 × 940 layout
+     * to the actual available Safari or standalone viewport.
+     */
+
+    #stage {
       position: absolute;
-      top: 0;
-      right: 0;
-      bottom: 0;
-      left: 0;
+
+      width: 768px;
+      height: 940px;
 
       overflow: hidden;
+
       background: #071725;
+
+      -webkit-transform-origin: 0 0;
+      transform-origin: 0 0;
     }
 
     /*
-     * CLOCK AND DATE
+     * CLOCK
      */
 
-    #header {
+    #clock {
       position: absolute;
-      top: 8px;
+      top: 5px;
       left: 0;
 
-      width: 100%;
-      height: 98px;
+      width: 768px;
+      height: 72px;
 
-      text-align: center;
-    }
-
-    #clock {
-      font-size: 72px;
-      line-height: 0.95;
+      font-size: 68px;
+      line-height: 72px;
       font-weight: 300;
       letter-spacing: 2px;
+
+      text-align: center;
+      color: #ffffff;
     }
 
     #date {
-      margin-top: 10px;
+      position: absolute;
+      top: 77px;
+      left: 0;
 
-      font-size: 23px;
-      line-height: 1;
+      width: 768px;
+      height: 28px;
+
+      font-size: 22px;
+      line-height: 28px;
       font-weight: 700;
 
+      text-align: center;
       color: #e4edf4;
+    }
+
+    /*
+     * LOCATION
+     */
+
+    #location {
+      position: absolute;
+      top: 112px;
+      left: 0;
+
+      width: 768px;
+      height: 25px;
+
+      font-size: 19px;
+      line-height: 25px;
+      font-weight: 800;
+      letter-spacing: 7px;
+
+      text-align: center;
+      text-transform: uppercase;
+
+      color: #c9d9e5;
     }
 
     /*
      * CURRENT WEATHER
      */
 
-    #current {
-      position: absolute;
-      top: 112px;
-      left: 0;
-
-      width: 100%;
-      height: 180px;
-
-      text-align: center;
-    }
-
-    #location {
-      font-size: 20px;
-      line-height: 1;
-      font-weight: 800;
-      letter-spacing: 7px;
-
-      color: #d3e1eb;
-    }
-
-    #current-line {
-      height: 103px;
-      margin-top: 5px;
-
-      white-space: nowrap;
-    }
-
-    #current-icon-box {
-      display: inline-block;
-
-      width: 95px;
-      height: 103px;
-
-      margin-right: 4px;
-
-      text-align: center;
-      vertical-align: middle;
-    }
-
     #current-icon {
-      display: inline-block;
+      position: absolute;
+      top: 148px;
+      left: 218px;
 
-      font-family:
-        "Arial Unicode MS",
-        "Helvetica Neue",
-        Arial,
-        sans-serif;
-
-      font-size: 76px;
-      line-height: 103px;
-
-      -webkit-transform: scale(1.32);
-      transform: scale(1.32);
-
-      -webkit-transform-origin: center center;
-      transform-origin: center center;
+      width: 88px;
+      height: 88px;
     }
 
     #temperature {
-      display: inline-block;
+      position: absolute;
+      top: 125px;
+      left: 316px;
 
-      font-size: 112px;
-      line-height: 103px;
+      width: 170px;
+      height: 118px;
+
+      font-size: 110px;
+      line-height: 118px;
       font-weight: 300;
 
-      vertical-align: middle;
+      text-align: left;
+      color: #ffffff;
     }
 
     #temperature-unit {
-      display: inline-block;
+      position: absolute;
+      top: 143px;
+      left: 482px;
 
-      margin-left: 5px;
-      padding-top: 10px;
+      width: 72px;
+      height: 46px;
 
       font-size: 34px;
-      line-height: 1;
+      line-height: 40px;
       font-weight: 600;
 
-      vertical-align: top;
+      text-align: left;
+      color: #ffffff;
     }
 
     #condition {
-      margin-top: 5px;
-      padding: 0 22px;
+      position: absolute;
+      top: 244px;
+      left: 35px;
+
+      width: 698px;
+      height: 36px;
+
+      padding: 0;
 
       font-size: 29px;
-      line-height: 1.1;
+      line-height: 36px;
       font-weight: 700;
+
+      text-align: center;
+      color: #ffffff;
     }
 
     /*
-     * CURRENT DETAILS
-     *
-     * Explicit positioning is used because old iOS
-     * standalone mode can miscalculate inline layouts.
+     * CURRENT DETAILS — FIXED 2 × 2 GRID
      */
 
-    #details-wrap {
-      position: absolute;
-      top: 303px;
-      left: 5%;
-
-      width: 90%;
-      height: 142px;
-    }
-
-    #details {
-      position: relative;
-
-      width: 100%;
-      height: 142px;
-    }
-
-    .detail {
+    .detail-card {
       position: absolute;
 
-      width: 49%;
-      height: 66px;
+      width: 330px;
+      height: 58px;
 
-      margin: 0;
-      padding: 8px 4px;
+      padding: 7px 10px;
 
       background: #102b3e;
       border: 1px solid #315169;
@@ -232,92 +219,91 @@
     }
 
     #detail-feels {
-      top: 0;
-      left: 0;
+      top: 294px;
+      left: 48px;
     }
 
     #detail-high-low {
-      top: 0;
-      right: 0;
+      top: 294px;
+      left: 390px;
     }
 
     #detail-rain {
-      bottom: 0;
-      left: 0;
+      top: 362px;
+      left: 48px;
     }
 
     #detail-wind {
-      right: 0;
-      bottom: 0;
+      top: 362px;
+      left: 390px;
     }
 
     .detail-label {
       display: block;
 
-      margin-bottom: 6px;
+      height: 18px;
 
-      font-size: 15px;
-      line-height: 1;
+      font-size: 14px;
+      line-height: 18px;
       font-weight: 800;
-      letter-spacing: 0.8px;
+      letter-spacing: 0.9px;
 
-      color: #b8c9d5;
+      color: #aec1cf;
     }
 
     .detail-value {
       display: block;
 
-      font-size: 24px;
-      line-height: 1;
+      height: 27px;
+
+      font-size: 23px;
+      line-height: 27px;
       font-weight: 800;
 
-      color: #ffffff;
       white-space: nowrap;
+      color: #ffffff;
     }
 
     /*
-     * FORECAST
+     * FORECAST TITLE
      */
 
     #forecast-title {
       position: absolute;
-      top: 460px;
-      left: 5%;
+      top: 440px;
+      left: 39px;
 
-      width: 90%;
+      width: 690px;
+      height: 24px;
 
       font-size: 16px;
-      line-height: 1;
+      line-height: 24px;
       font-weight: 800;
       letter-spacing: 2px;
 
-      color: #a5bac9;
       text-align: left;
+      color: #a4b9c8;
     }
 
-    #forecast-wrap {
-      position: absolute;
-      top: 487px;
-      left: 4%;
-
-      width: 92%;
-      height: 420px;
-    }
+    /*
+     * FORECAST ROWS
+     */
 
     #forecast {
-      width: 100%;
-      height: 420px;
+      position: absolute;
+      top: 470px;
+      left: 36px;
+
+      width: 696px;
+      height: 394px;
     }
 
-    .forecast-day {
-      display: table;
+    .forecast-row {
+      position: absolute;
+      left: 0;
 
-      width: 100%;
-      height: 79px;
-
-      margin: 0 0 6px 0;
-
-      table-layout: fixed;
+      width: 696px;
+      height: 73px;
 
       background: #102b3e;
       border: 2px solid #315169;
@@ -326,125 +312,134 @@
       color: #ffffff;
     }
 
-    .forecast-day:last-child {
-      margin-bottom: 0;
-    }
-
-    .forecast-day.today {
+    .forecast-row.today {
       background: #194c6c;
       border-color: #67bcec;
     }
 
-    .forecast-cell {
-      display: table-cell;
+    .forecast-day {
+      position: absolute;
+      top: 0;
+      left: 16px;
 
-      height: 75px;
-
-      vertical-align: middle;
-    }
-
-    .forecast-name {
-      width: 21%;
-      padding-left: 13px;
+      width: 122px;
+      height: 69px;
 
       font-size: 21px;
-      line-height: 1;
+      line-height: 69px;
       font-weight: 800;
-      letter-spacing: 0.5px;
+      letter-spacing: 0.4px;
 
       text-align: left;
+      white-space: nowrap;
     }
 
     .forecast-date {
-      width: 17%;
+      position: absolute;
+      top: 0;
+      left: 142px;
+
+      width: 94px;
+      height: 69px;
 
       font-size: 16px;
-      line-height: 1;
+      line-height: 69px;
       font-weight: 700;
 
       text-align: left;
-      color: #c2d1db;
+      white-space: nowrap;
+
+      color: #c1d0da;
     }
 
     .forecast-icon {
-      width: 15%;
+      position: absolute;
+      top: 14px;
+      left: 247px;
 
-      font-family:
-        "Arial Unicode MS",
-        "Helvetica Neue",
-        Arial,
-        sans-serif;
-
-      font-size: 37px;
-      line-height: 1;
-
-      text-align: center;
-    }
-
-    .forecast-icon-symbol {
-      display: inline-block;
-
-      -webkit-transform: scale(1.25);
-      transform: scale(1.25);
-
-      -webkit-transform-origin: center center;
-      transform-origin: center center;
-    }
-
-    .forecast-temperature {
-      width: 29%;
-
-      white-space: nowrap;
-      text-align: center;
+      width: 46px;
+      height: 46px;
     }
 
     .forecast-high {
+      position: absolute;
+      top: 0;
+      left: 334px;
+
+      width: 75px;
+      height: 69px;
+
       font-size: 29px;
-      line-height: 1;
+      line-height: 69px;
       font-weight: 800;
+
+      text-align: right;
+      white-space: nowrap;
     }
 
     .forecast-low {
-      margin-left: 6px;
+      position: absolute;
+      top: 0;
+      left: 416px;
+
+      width: 62px;
+      height: 69px;
 
       font-size: 21px;
-      line-height: 1;
+      line-height: 69px;
       font-weight: 700;
+
+      text-align: left;
+      white-space: nowrap;
 
       color: #b4c5d0;
     }
 
-    .forecast-rain {
-      width: 18%;
-      padding-right: 12px;
+    .forecast-rain-icon {
+      position: absolute;
+      top: 22px;
+      left: 555px;
 
-      font-size: 16px;
-      line-height: 1;
+      width: 25px;
+      height: 25px;
+    }
+
+    .forecast-rain {
+      position: absolute;
+      top: 0;
+      right: 15px;
+
+      width: 95px;
+      height: 69px;
+
+      font-size: 17px;
+      line-height: 69px;
       font-weight: 800;
 
       text-align: right;
-      color: #c6e7f8;
       white-space: nowrap;
+
+      color: #c7e8f8;
     }
 
     /*
-     * UPDATE STATUS
+     * STATUS
      */
 
     #status {
       position: absolute;
-      right: 0;
-      bottom: 8px;
+      top: 911px;
       left: 0;
 
-      width: 100%;
+      width: 768px;
+      height: 20px;
 
       font-size: 12px;
-      line-height: 1;
+      line-height: 20px;
       font-weight: 700;
 
       text-align: center;
-      color: #8299a9;
+      color: #829aa9;
     }
 
     #status.error {
@@ -455,89 +450,91 @@
 
 <body>
 
-  <div id="app">
+  <div id="stage">
 
-    <div id="header">
-      <div id="clock">--:--</div>
-      <div id="date">Loading date…</div>
+    <div id="clock">--:--</div>
+    <div id="date">Loading date…</div>
+
+    <div id="location">Paris</div>
+
+    <div id="current-icon"></div>
+
+    <div id="temperature">--</div>
+    <div id="temperature-unit">°C</div>
+
+    <div id="condition">Loading weather…</div>
+
+    <div class="detail-card" id="detail-feels">
+      <span class="detail-label">FEELS LIKE</span>
+      <span class="detail-value">
+        <span id="apparent">--</span> °C
+      </span>
     </div>
 
-    <div id="current">
-      <div id="location">Paris</div>
-
-      <div id="current-line">
-        <span id="current-icon-box">
-          <span id="current-icon">•</span>
-        </span>
-
-        <span id="temperature">--</span>
-        <span id="temperature-unit">°C</span>
-      </div>
-
-      <div id="condition">Loading weather…</div>
+    <div class="detail-card" id="detail-high-low">
+      <span class="detail-label">HIGH / LOW</span>
+      <span class="detail-value">
+        <span id="maximum">--</span>° /
+        <span id="minimum">--</span>°
+      </span>
     </div>
 
-    <div id="details-wrap">
-      <div id="details">
-
-        <div class="detail" id="detail-feels">
-          <span class="detail-label">FEELS LIKE</span>
-          <span class="detail-value">
-            <span id="apparent">--</span> °C
-          </span>
-        </div>
-
-        <div class="detail" id="detail-high-low">
-          <span class="detail-label">HIGH / LOW</span>
-          <span class="detail-value">
-            <span id="maximum">--</span>° /
-            <span id="minimum">--</span>°
-          </span>
-        </div>
-
-        <div class="detail" id="detail-rain">
-          <span class="detail-label">RAIN</span>
-          <span class="detail-value">
-            <span id="rain">--</span>%
-          </span>
-        </div>
-
-        <div class="detail" id="detail-wind">
-          <span class="detail-label">WIND</span>
-          <span class="detail-value">
-            <span id="wind">--</span> km/h
-          </span>
-        </div>
-
-      </div>
+    <div class="detail-card" id="detail-rain">
+      <span class="detail-label">RAIN</span>
+      <span class="detail-value">
+        <span id="rain">--</span>%
+      </span>
     </div>
 
-    <div id="forecast-title">
-      5-DAY FORECAST
+    <div class="detail-card" id="detail-wind">
+      <span class="detail-label">WIND</span>
+      <span class="detail-value">
+        <span id="wind">--</span> km/h
+      </span>
     </div>
 
-    <div id="forecast-wrap">
-      <div id="forecast"></div>
-    </div>
+    <div id="forecast-title">5-DAY FORECAST</div>
 
-    <div id="status">
-      Initialising…
-    </div>
+    <div id="forecast"></div>
+
+    <div id="status">Initialising…</div>
 
   </div>
 
+  <!--
+    Load the same-origin weather file synchronously.
+    The timestamp prevents old Safari from keeping
+    an obsolete cached weather-data.js file.
+  -->
+
   <script type="text/javascript">
+    document.write(
+      '<script type="text/javascript" src="./weather-data.js?_=' +
+      new Date().getTime() +
+      '"><\/script>'
+    );
+  </script>
+
+  <script type="text/javascript">
+
+    /*
+     * CONFIGURATION
+     */
 
     var CITY = "Paris";
 
-    var WEATHER_REFRESH_INTERVAL =
-      30 * 60 * 1000;
-
-    var WEATHER_DATA_FILE =
-      "./weather-data.js";
+    var BASE_WIDTH = 768;
+    var BASE_HEIGHT = 940;
 
     var WEATHER_CACHE_KEY =
-      "ipadWeatherPortraitV2";
+      "ipadWeatherFinalV11";
+
+    var PAGE_REFRESH_INTERVAL =
+      30 * 60 * 1000;
+
+    /*
+     * DATE LABELS
+     */
 
     var DAYS_FULL = [
       "Sunday",
@@ -588,6 +585,10 @@
       "Nov",
       "Dec"
     ];
+
+    /*
+     * BASIC HELPERS
+     */
 
     function pad(number) {
       return number < 10
@@ -644,6 +645,68 @@
       );
     }
 
+    /*
+     * SCALE THE COMPLETE FIXED ARTBOARD
+     */
+
+    function fitStage() {
+      var viewportWidth =
+        window.innerWidth ||
+        document.documentElement.clientWidth ||
+        BASE_WIDTH;
+
+      var viewportHeight =
+        window.innerHeight ||
+        document.documentElement.clientHeight ||
+        BASE_HEIGHT;
+
+      var horizontalScale =
+        viewportWidth / BASE_WIDTH;
+
+      var verticalScale =
+        viewportHeight / BASE_HEIGHT;
+
+      var scale =
+        horizontalScale < verticalScale
+          ? horizontalScale
+          : verticalScale;
+
+      var scaledWidth =
+        BASE_WIDTH * scale;
+
+      var scaledHeight =
+        BASE_HEIGHT * scale;
+
+      var left =
+        Math.round(
+          (viewportWidth - scaledWidth) / 2
+        );
+
+      var top =
+        Math.round(
+          (viewportHeight - scaledHeight) / 2
+        );
+
+      var stage =
+        document.getElementById("stage");
+
+      stage.style.left =
+        left + "px";
+
+      stage.style.top =
+        top + "px";
+
+      stage.style.webkitTransform =
+        "scale(" + scale + ")";
+
+      stage.style.transform =
+        "scale(" + scale + ")";
+    }
+
+    /*
+     * CLOCK
+     */
+
     function updateClock() {
       var now = new Date();
 
@@ -662,104 +725,286 @@
         now.getFullYear();
     }
 
-    function getWeatherDescription(code, isDay) {
+    /*
+     * WEATHER CODE MAPPING
+     */
+
+    function getWeatherVisual(code, isDay) {
       code = Number(code);
 
       if (code === 0) {
         return {
-          icon: isDay === false ? "☾" : "☀",
+          type: isDay === false
+            ? "night"
+            : "sun",
           text: "Clear"
         };
       }
 
       if (code === 1) {
         return {
-          icon: isDay === false ? "☾" : "☀",
+          type: isDay === false
+            ? "night"
+            : "sun",
           text: "Mostly clear"
         };
       }
 
       if (code === 2) {
         return {
-          icon: "☁",
+          type: "partly",
           text: "Partly cloudy"
         };
       }
 
       if (code === 3) {
         return {
-          icon: "☁",
+          type: "cloud",
           text: "Overcast"
         };
       }
 
-      if (code === 45 || code === 48) {
+      if (
+        code === 45 ||
+        code === 48
+      ) {
         return {
-          icon: "≋",
+          type: "fog",
           text: "Foggy"
         };
       }
 
-      if (code >= 51 && code <= 57) {
+      if (
+        code >= 51 &&
+        code <= 57
+      ) {
         return {
-          icon: "☂",
+          type: "drizzle",
           text: "Drizzle"
         };
       }
 
-      if (code >= 61 && code <= 67) {
+      if (
+        code >= 61 &&
+        code <= 67
+      ) {
         return {
-          icon: "☂",
+          type: "rain",
           text: "Rain"
         };
       }
 
-      if (code >= 71 && code <= 77) {
+      if (
+        code >= 71 &&
+        code <= 77
+      ) {
         return {
-          icon: "❄",
+          type: "snow",
           text: "Snow"
         };
       }
 
-      if (code >= 80 && code <= 82) {
+      if (
+        code >= 80 &&
+        code <= 82
+      ) {
         return {
-          icon: "☂",
+          type: "rain",
           text: "Rain showers"
         };
       }
 
-      if (code >= 85 && code <= 86) {
+      if (
+        code >= 85 &&
+        code <= 86
+      ) {
         return {
-          icon: "❄",
+          type: "snow",
           text: "Snow showers"
         };
       }
 
-      if (code >= 95 && code <= 99) {
+      if (
+        code >= 95 &&
+        code <= 99
+      ) {
         return {
-          icon: "⚡",
+          type: "thunder",
           text: "Thunderstorms"
         };
       }
 
       return {
-        icon: "•",
+        type: "cloud",
         text: "Variable conditions"
       };
     }
+
+    /*
+     * CONSISTENT SVG WEATHER ICONS
+     */
+
+    function iconSvg(type, size) {
+      var start =
+        '<svg xmlns="http://www.w3.org/2000/svg"' +
+        ' width="' + size + '"' +
+        ' height="' + size + '"' +
+        ' viewBox="0 0 64 64"' +
+        ' aria-hidden="true">';
+
+      var end =
+        '</svg>';
+
+      var cloud =
+        '<path d="' +
+        'M18 49h28c8 0 14-6 14-13' +
+        's-6-13-14-13c-2 0-4 .4-6 1.3' +
+        'C37 17 31 13 24 13' +
+        'c-9 0-16 7-16 16v1' +
+        'c-5 2-8 6-8 11' +
+        'c0 5 4 8 9 8h9z"' +
+        ' fill="#f7fbff"/>';
+
+      if (type === "sun") {
+        return (
+          start +
+          '<circle cx="32" cy="32" r="12" fill="#ffd86b"/>' +
+          '<g stroke="#ffd86b" stroke-width="4" stroke-linecap="round">' +
+          '<line x1="32" y1="5" x2="32" y2="12"/>' +
+          '<line x1="32" y1="52" x2="32" y2="59"/>' +
+          '<line x1="5" y1="32" x2="12" y2="32"/>' +
+          '<line x1="52" y1="32" x2="59" y2="32"/>' +
+          '<line x1="13" y1="13" x2="18" y2="18"/>' +
+          '<line x1="46" y1="46" x2="51" y2="51"/>' +
+          '<line x1="46" y1="18" x2="51" y2="13"/>' +
+          '<line x1="13" y1="51" x2="18" y2="46"/>' +
+          '</g>' +
+          end
+        );
+      }
+
+      if (type === "night") {
+        return (
+          start +
+          '<path d="' +
+          'M43 48c-15 0-27-12-27-27' +
+          'c0-5 1-9 3-13' +
+          'C10 13 5 22 5 32' +
+          'c0 16 13 29 29 29' +
+          'c10 0 19-5 24-14' +
+          'c-4 1-9 1-15 1z"' +
+          ' fill="#f7fbff"/>' +
+          end
+        );
+      }
+
+      if (type === "partly") {
+        return (
+          start +
+          '<circle cx="24" cy="23" r="11" fill="#ffd86b"/>' +
+          cloud +
+          end
+        );
+      }
+
+      if (type === "fog") {
+        return (
+          start +
+          cloud +
+          '<g stroke="#b9d8e8" stroke-width="4" stroke-linecap="round">' +
+          '<line x1="12" y1="53" x2="52" y2="53"/>' +
+          '<line x1="18" y1="60" x2="46" y2="60"/>' +
+          '</g>' +
+          end
+        );
+      }
+
+      if (
+        type === "drizzle" ||
+        type === "rain"
+      ) {
+        return (
+          start +
+          cloud +
+          '<g stroke="#65c8f2" stroke-width="4" stroke-linecap="round">' +
+          '<line x1="20" y1="53" x2="17" y2="60"/>' +
+          '<line x1="33" y1="53" x2="30" y2="60"/>' +
+          '<line x1="46" y1="53" x2="43" y2="60"/>' +
+          '</g>' +
+          end
+        );
+      }
+
+      if (type === "snow") {
+        return (
+          start +
+          cloud +
+          '<g fill="#dff5ff">' +
+          '<circle cx="19" cy="57" r="3"/>' +
+          '<circle cx="32" cy="57" r="3"/>' +
+          '<circle cx="45" cy="57" r="3"/>' +
+          '</g>' +
+          end
+        );
+      }
+
+      if (type === "thunder") {
+        return (
+          start +
+          cloud +
+          '<polygon points="34,48 25,60 33,60 29,64 44,53 36,53"' +
+          ' fill="#ffd86b"/>' +
+          end
+        );
+      }
+
+      return (
+        start +
+        cloud +
+        end
+      );
+    }
+
+    function rainMiniSvg() {
+      return (
+        '<svg xmlns="http://www.w3.org/2000/svg"' +
+        ' width="25" height="25" viewBox="0 0 32 32">' +
+        '<path d="' +
+        'M9 20h14c4 0 7-3 7-7s-3-7-7-7' +
+        'c-1 0-2 0-3 .5C18 3 15 2 12 2' +
+        'C7 2 3 6 3 11v1c-2 1-3 3-3 5' +
+        'c0 2 2 3 4 3h5z"' +
+        ' fill="#d9effa"/>' +
+        '<g stroke="#65c8f2" stroke-width="2.5" stroke-linecap="round">' +
+        '<line x1="10" y1="23" x2="8" y2="28"/>' +
+        '<line x1="17" y1="23" x2="15" y2="28"/>' +
+        '<line x1="24" y1="23" x2="22" y2="28"/>' +
+        '</g>' +
+        '</svg>'
+      );
+    }
+
+    /*
+     * STATUS AND SOURCE TIME
+     */
 
     function updateStatus(text, isError) {
       var status =
         document.getElementById("status");
 
       status.innerHTML = text;
+
       status.className =
-        isError ? "error" : "";
+        isError
+          ? "error"
+          : "";
     }
 
     function getSourceUpdateLabel(data) {
       var generated =
-        parseUtcDate(data.generated_at_utc);
+        parseUtcDate(
+          data.generated_at_utc
+        );
 
       if (!generated) {
         return "";
@@ -772,12 +1017,17 @@
       );
     }
 
+    /*
+     * FORECAST
+     */
+
     function renderForecast(daily) {
       var forecast =
         document.getElementById("forecast");
 
       var html = "";
       var count = 5;
+      var rowHeight = 80;
       var i;
 
       if (
@@ -791,63 +1041,73 @@
 
       for (i = 0; i < count; i++) {
         var date =
-          parseDateString(daily.time[i]);
+          parseDateString(
+            daily.time[i]
+          );
 
-        var description =
-          getWeatherDescription(
+        var visual =
+          getWeatherVisual(
             daily.weather_code[i],
             true
           );
 
-        var cardClass =
-          i === 0
-            ? "forecast-day today"
-            : "forecast-day";
-
         var dayLabel =
           i === 0
             ? "TODAY"
-            : DAYS_SHORT[date.getDay()];
+            : DAYS_SHORT[
+                date.getDay()
+              ];
+
+        var className =
+          i === 0
+            ? "forecast-row today"
+            : "forecast-row";
 
         html +=
           '<div class="' +
-            cardClass +
-          '">' +
+          className +
+          '" style="top:' +
+          (i * rowHeight) +
+          'px">' +
 
-            '<div class="forecast-cell forecast-name">' +
+            '<div class="forecast-day">' +
               dayLabel +
             '</div>' +
 
-            '<div class="forecast-cell forecast-date">' +
+            '<div class="forecast-date">' +
               date.getDate() +
               " " +
-              MONTHS_SHORT[date.getMonth()] +
+              MONTHS_SHORT[
+                date.getMonth()
+              ] +
             '</div>' +
 
-            '<div class="forecast-cell forecast-icon">' +
-              '<span class="forecast-icon-symbol">' +
-                description.icon +
-              '</span>' +
+            '<div class="forecast-icon">' +
+              iconSvg(
+                visual.type,
+                46
+              ) +
             '</div>' +
 
-            '<div class="forecast-cell forecast-temperature">' +
-              '<span class="forecast-high">' +
-                rounded(
-                  daily.temperature_2m_max[i]
-                ) +
-                "°" +
-              '</span>' +
-
-              '<span class="forecast-low">' +
-                rounded(
-                  daily.temperature_2m_min[i]
-                ) +
-                "°" +
-              '</span>' +
+            '<div class="forecast-high">' +
+              rounded(
+                daily.temperature_2m_max[i]
+              ) +
+              "°" +
             '</div>' +
 
-            '<div class="forecast-cell forecast-rain">' +
-              "☂ " +
+            '<div class="forecast-low">' +
+              rounded(
+                daily.temperature_2m_min[i]
+              ) +
+              "°" +
+            '</div>' +
+
+            '<div class="forecast-rain-icon">' +
+              rainMiniSvg() +
+            '</div>' +
+
+            '<div class="forecast-rain">' +
               rounded(
                 daily.precipitation_probability_max[i]
               ) +
@@ -860,7 +1120,14 @@
       forecast.innerHTML = html;
     }
 
-    function renderWeather(data, fromCache) {
+    /*
+     * RENDER WEATHER
+     */
+
+    function renderWeather(
+      data,
+      fromCache
+    ) {
       var current =
         data.current || {};
 
@@ -868,37 +1135,62 @@
         data.daily || {};
 
       var isDay =
-        Number(current.is_day) === 1;
+        Number(
+          current.is_day
+        ) === 1;
 
-      var description =
-        getWeatherDescription(
+      var visual =
+        getWeatherVisual(
           current.weather_code,
           isDay
         );
 
-      document.getElementById("location").innerHTML =
+      document.getElementById(
+        "location"
+      ).innerHTML =
         CITY;
 
-      document.getElementById("current-icon").innerHTML =
-        description.icon;
+      document.getElementById(
+        "current-icon"
+      ).innerHTML =
+        iconSvg(
+          visual.type,
+          88
+        );
 
-      document.getElementById("condition").innerHTML =
-        description.text;
+      document.getElementById(
+        "condition"
+      ).innerHTML =
+        visual.text;
 
-      document.getElementById("temperature").innerHTML =
-        rounded(current.temperature_2m);
+      document.getElementById(
+        "temperature"
+      ).innerHTML =
+        rounded(
+          current.temperature_2m
+        );
 
-      document.getElementById("apparent").innerHTML =
-        rounded(current.apparent_temperature);
+      document.getElementById(
+        "apparent"
+      ).innerHTML =
+        rounded(
+          current.apparent_temperature
+        );
 
-      document.getElementById("wind").innerHTML =
-        rounded(current.wind_speed_10m);
+      document.getElementById(
+        "wind"
+      ).innerHTML =
+        rounded(
+          current.wind_speed_10m
+        );
 
       if (
         daily.temperature_2m_max &&
-        daily.temperature_2m_max.length > 0
+        daily.temperature_2m_max.length
       ) {
-        document.getElementById("maximum").innerHTML =
+        document.getElementById(
+          "maximum"
+        ).innerHTML =
           rounded(
             daily.temperature_2m_max[0]
           );
@@ -906,9 +1198,11 @@
 
       if (
         daily.temperature_2m_min &&
-        daily.temperature_2m_min.length > 0
+        daily.temperature_2m_min.length
       ) {
-        document.getElementById("minimum").innerHTML =
+        document.getElementById(
+          "minimum"
+        ).innerHTML =
           rounded(
             daily.temperature_2m_min[0]
           );
@@ -916,9 +1210,11 @@
 
       if (
         daily.precipitation_probability_max &&
-        daily.precipitation_probability_max.length > 0
+        daily.precipitation_probability_max.length
       ) {
-        document.getElementById("rain").innerHTML =
+        document.getElementById(
+          "rain"
+        ).innerHTML =
           rounded(
             daily.precipitation_probability_max[0]
           );
@@ -932,30 +1228,35 @@
       if (fromCache) {
         updateStatus(
           sourceTime
-            ? "Saved forecast · source " + sourceTime
+            ? "Saved forecast · source " +
+              sourceTime
             : "Saved forecast",
           false
         );
       } else {
         updateStatus(
           sourceTime
-            ? "Forecast updated at " + sourceTime
+            ? "Forecast updated at " +
+              sourceTime
             : "Forecast updated",
           false
         );
       }
     }
 
-    function saveWeatherCache(weatherText) {
+    /*
+     * CACHE
+     */
+
+    function saveWeatherCache(data) {
       try {
         window.localStorage.setItem(
           WEATHER_CACHE_KEY,
-          weatherText
+          JSON.stringify(data)
         );
       } catch (error) {
         /*
-         * Storage may be unavailable
-         * in private browsing.
+         * Storage may be unavailable.
          */
       }
     }
@@ -984,90 +1285,26 @@
       return false;
     }
 
-    function loadWeather() {
-      updateStatus(
-        "Checking for weather updates…",
-        false
-      );
+    /*
+     * START
+     */
 
-      var previousLoader =
-        document.getElementById(
-          "weather-data-loader"
-        );
+    function startDashboard() {
+      fitStage();
+      updateClock();
 
       if (
-        previousLoader &&
-        previousLoader.parentNode
+        window.WEATHER_DATA
       ) {
-        previousLoader.parentNode.removeChild(
-          previousLoader
+        saveWeatherCache(
+          window.WEATHER_DATA
         );
-      }
 
-      window.WEATHER_DATA = null;
-
-      var loader =
-        document.createElement("script");
-
-      loader.id =
-        "weather-data-loader";
-
-      loader.type =
-        "text/javascript";
-
-      loader.src =
-        WEATHER_DATA_FILE +
-        "?_=" +
-        new Date().getTime();
-
-      var completed = false;
-      var timeoutId;
-
-      function finishLoading() {
-        if (completed) {
-          return;
-        }
-
-        if (
-          loader.readyState &&
-          loader.readyState !== "loaded" &&
-          loader.readyState !== "complete"
-        ) {
-          return;
-        }
-
-        completed = true;
-
-        window.clearTimeout(timeoutId);
-
-        loader.onload = null;
-        loader.onreadystatechange = null;
-
-        if (window.WEATHER_DATA) {
-          try {
-            var weatherText =
-              JSON.stringify(
-                window.WEATHER_DATA
-              );
-
-            saveWeatherCache(weatherText);
-
-            renderWeather(
-              window.WEATHER_DATA,
-              false
-            );
-          } catch (error) {
-            if (!loadWeatherCache()) {
-              updateStatus(
-                "Weather data could not be read",
-                true
-              );
-            }
-          }
-
-          return;
-        }
-
+        renderWeather(
+          window.WEATHER_DATA,
+          false
+        );
+      } else {
         if (!loadWeatherCache()) {
           updateStatus(
             "Weather data unavailable",
@@ -1076,73 +1313,67 @@
         }
       }
 
-      loader.onload =
-        finishLoading;
-
-      loader.onreadystatechange =
-        finishLoading;
-
-      loader.onerror = function () {
-        if (completed) {
-          return;
-        }
-
-        completed = true;
-
-        window.clearTimeout(timeoutId);
-
-        if (!loadWeatherCache()) {
-          updateStatus(
-            "Unable to load weather data",
-            true
-          );
-        }
-      };
-
-      timeoutId =
-        window.setTimeout(
-          function () {
-            if (completed) {
-              return;
-            }
-
-            completed = true;
-
-            if (!loadWeatherCache()) {
-              updateStatus(
-                "Weather request timed out",
-                true
-              );
-            }
-          },
-          15000
-        );
-
-      document
-        .getElementsByTagName("head")[0]
-        .appendChild(loader);
-    }
-
-    function startDashboard() {
-      updateClock();
-
-      loadWeatherCache();
-      loadWeather();
-
       window.setInterval(
         updateClock,
         30 * 1000
       );
 
-      window.setInterval(
-        loadWeather,
-        WEATHER_REFRESH_INTERVAL
+      /*
+       * Reload the complete page every 30 minutes.
+       * The page and weather-data.js both receive
+       * cache-busting query parameters.
+       */
+
+      window.setTimeout(
+        function () {
+          var cleanUrl =
+            window.location.href
+            .split("?")[0]
+            .split("#")[0];
+
+          window.location.replace(
+            cleanUrl +
+            "?refresh=" +
+            new Date().getTime()
+          );
+        },
+        PAGE_REFRESH_INTERVAL
+      );
+
+      window.setTimeout(
+        fitStage,
+        500
+      );
+
+      window.setTimeout(
+        fitStage,
+        1500
+      );
+    }
+
+    if (
+      window.addEventListener
+    ) {
+      window.addEventListener(
+        "resize",
+        fitStage,
+        false
+      );
+
+      window.addEventListener(
+        "orientationchange",
+        function () {
+          window.setTimeout(
+            fitStage,
+            300
+          );
+        },
+        false
       );
     }
 
     startDashboard();
 
   </script>
-
 </body>
 </html>
