@@ -6,15 +6,14 @@
   <meta
     name="viewport"
     content="width=device-width, initial-scale=1,
-             maximum-scale=1, user-scalable=no">
+    maximum-scale=1, user-scalable=no">
 
-  <!-- iOS home-screen web app -->
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
   <meta name="apple-mobile-web-app-title" content="Weather">
   <meta name="format-detection" content="telephone=no">
 
-  <!-- Full page reload every 6 hours -->
+  <!-- Complete page reload every six hours -->
   <meta http-equiv="refresh" content="21600">
 
   <title>Paris Weather</title>
@@ -31,6 +30,7 @@
       margin: 0;
       padding: 0;
       overflow: hidden;
+
       background: #071725;
       color: #ffffff;
 
@@ -61,36 +61,40 @@
       right: 0;
       bottom: 0;
       left: 0;
+
       overflow: hidden;
       background: #071725;
     }
 
     /*
-     * HEADER
+     * CLOCK AND DATE
      */
 
     #header {
       position: absolute;
-      top: 14px;
+      top: 8px;
       left: 0;
+
       width: 100%;
-      height: 108px;
+      height: 98px;
+
       text-align: center;
     }
 
     #clock {
-      font-size: 80px;
+      font-size: 72px;
       line-height: 0.95;
       font-weight: 300;
       letter-spacing: 2px;
-      color: #ffffff;
     }
 
     #date {
       margin-top: 10px;
-      font-size: 25px;
-      line-height: 1.1;
-      font-weight: 600;
+
+      font-size: 23px;
+      line-height: 1;
+      font-weight: 700;
+
       color: #e4edf4;
     }
 
@@ -100,90 +104,124 @@
 
     #current {
       position: absolute;
-      top: 130px;
+      top: 112px;
       left: 0;
+
       width: 100%;
-      height: 195px;
+      height: 180px;
+
       text-align: center;
     }
 
     #location {
-      font-size: 22px;
+      font-size: 20px;
       line-height: 1;
-      font-weight: 700;
+      font-weight: 800;
       letter-spacing: 7px;
-      text-transform: uppercase;
+
       color: #d3e1eb;
     }
 
     #current-line {
-      height: 116px;
-      margin-top: 4px;
+      height: 103px;
+      margin-top: 5px;
+
       white-space: nowrap;
+    }
+
+    #current-icon-box {
+      display: inline-block;
+
+      width: 95px;
+      height: 103px;
+
+      margin-right: 4px;
+
+      text-align: center;
+      vertical-align: middle;
     }
 
     #current-icon {
       display: inline-block;
-      margin-right: 17px;
-      font-size: 72px;
-      line-height: 116px;
-      vertical-align: middle;
-      color: #ffffff;
+
+      font-family:
+        "Arial Unicode MS",
+        "Helvetica Neue",
+        Arial,
+        sans-serif;
+
+      font-size: 76px;
+      line-height: 103px;
+
+      -webkit-transform: scale(1.32);
+      transform: scale(1.32);
+
+      -webkit-transform-origin: center center;
+      transform-origin: center center;
     }
 
     #temperature {
       display: inline-block;
-      font-size: 118px;
-      line-height: 116px;
+
+      font-size: 112px;
+      line-height: 103px;
       font-weight: 300;
+
       vertical-align: middle;
-      color: #ffffff;
     }
 
     #temperature-unit {
       display: inline-block;
+
       margin-left: 5px;
-      padding-top: 12px;
-      font-size: 36px;
+      padding-top: 10px;
+
+      font-size: 34px;
       line-height: 1;
-      font-weight: 500;
+      font-weight: 600;
+
       vertical-align: top;
-      color: #ffffff;
     }
 
     #condition {
-      margin-top: 4px;
-      padding: 0 20px;
-      font-size: 30px;
+      margin-top: 5px;
+      padding: 0 22px;
+
+      font-size: 29px;
       line-height: 1.1;
-      font-weight: 600;
-      color: #ffffff;
+      font-weight: 700;
     }
 
     /*
-     * CURRENT WEATHER DETAILS
+     * CURRENT DETAILS
+     *
+     * Explicit positioning is used because old iOS
+     * standalone mode can miscalculate inline layouts.
      */
 
     #details-wrap {
       position: absolute;
-      top: 335px;
-      left: 4%;
-      width: 92%;
-      height: 150px;
+      top: 303px;
+      left: 5%;
+
+      width: 90%;
+      height: 142px;
     }
 
     #details {
+      position: relative;
+
       width: 100%;
-      height: 150px;
-      font-size: 0;
-      text-align: center;
+      height: 142px;
     }
 
     .detail {
-      display: inline-block;
-      width: 48%;
-      height: 68px;
-      margin: 4px 1%;
+      position: absolute;
+
+      width: 49%;
+      height: 66px;
+
+      margin: 0;
       padding: 8px 4px;
 
       background: #102b3e;
@@ -191,16 +229,36 @@
       border-radius: 9px;
 
       text-align: center;
-      vertical-align: top;
+    }
+
+    #detail-feels {
+      top: 0;
+      left: 0;
+    }
+
+    #detail-high-low {
+      top: 0;
+      right: 0;
+    }
+
+    #detail-rain {
+      bottom: 0;
+      left: 0;
+    }
+
+    #detail-wind {
+      right: 0;
+      bottom: 0;
     }
 
     .detail-label {
       display: block;
+
       margin-bottom: 6px;
 
-      font-size: 16px;
+      font-size: 15px;
       line-height: 1;
-      font-weight: 700;
+      font-weight: 800;
       letter-spacing: 0.8px;
 
       color: #b8c9d5;
@@ -209,7 +267,7 @@
     .detail-value {
       display: block;
 
-      font-size: 25px;
+      font-size: 24px;
       line-height: 1;
       font-weight: 800;
 
@@ -218,41 +276,45 @@
     }
 
     /*
-     * FIVE-DAY FORECAST
+     * FORECAST
      */
 
     #forecast-title {
       position: absolute;
-      top: 505px;
+      top: 460px;
       left: 5%;
+
       width: 90%;
 
-      font-size: 17px;
+      font-size: 16px;
       line-height: 1;
-      font-weight: 700;
+      font-weight: 800;
       letter-spacing: 2px;
 
-      color: #9fb4c3;
+      color: #a5bac9;
       text-align: left;
     }
 
     #forecast-wrap {
       position: absolute;
-      top: 533px;
+      top: 487px;
       left: 4%;
+
       width: 92%;
-      height: 405px;
+      height: 420px;
     }
 
     #forecast {
       width: 100%;
-      height: 405px;
+      height: 420px;
     }
 
     .forecast-day {
       display: table;
+
       width: 100%;
-      height: 76px;
+      height: 79px;
+
       margin: 0 0 6px 0;
 
       table-layout: fixed;
@@ -270,66 +332,82 @@
 
     .forecast-day.today {
       background: #194c6c;
-      border-color: #66b9e9;
+      border-color: #67bcec;
     }
 
     .forecast-cell {
       display: table-cell;
-      height: 72px;
+
+      height: 75px;
+
       vertical-align: middle;
     }
 
     .forecast-name {
-      width: 18%;
+      width: 21%;
       padding-left: 13px;
 
-      font-size: 22px;
+      font-size: 21px;
       line-height: 1;
       font-weight: 800;
-      letter-spacing: 0.7px;
+      letter-spacing: 0.5px;
 
       text-align: left;
-      color: #ffffff;
     }
 
     .forecast-date {
-      width: 18%;
+      width: 17%;
 
-      font-size: 17px;
+      font-size: 16px;
       line-height: 1;
-      font-weight: 600;
+      font-weight: 700;
 
       text-align: left;
-      color: #c1d0da;
+      color: #c2d1db;
     }
 
     .forecast-icon {
-      width: 17%;
+      width: 15%;
 
-      font-size: 39px;
+      font-family:
+        "Arial Unicode MS",
+        "Helvetica Neue",
+        Arial,
+        sans-serif;
+
+      font-size: 37px;
       line-height: 1;
 
       text-align: center;
-      color: #ffffff;
+    }
+
+    .forecast-icon-symbol {
+      display: inline-block;
+
+      -webkit-transform: scale(1.25);
+      transform: scale(1.25);
+
+      -webkit-transform-origin: center center;
+      transform-origin: center center;
     }
 
     .forecast-temperature {
       width: 29%;
+
       white-space: nowrap;
       text-align: center;
     }
 
     .forecast-high {
-      font-size: 30px;
+      font-size: 29px;
       line-height: 1;
       font-weight: 800;
-      color: #ffffff;
     }
 
     .forecast-low {
       margin-left: 6px;
 
-      font-size: 23px;
+      font-size: 21px;
       line-height: 1;
       font-weight: 700;
 
@@ -338,11 +416,11 @@
 
     .forecast-rain {
       width: 18%;
-      padding-right: 13px;
+      padding-right: 12px;
 
-      font-size: 17px;
+      font-size: 16px;
       line-height: 1;
-      font-weight: 700;
+      font-weight: 800;
 
       text-align: right;
       color: #c6e7f8;
@@ -358,11 +436,12 @@
       right: 0;
       bottom: 8px;
       left: 0;
+
       width: 100%;
 
       font-size: 12px;
       line-height: 1;
-      font-weight: 600;
+      font-weight: 700;
 
       text-align: center;
       color: #8299a9;
@@ -370,126 +449,6 @@
 
     #status.error {
       color: #ffc4c4;
-    }
-
-    /*
-     * COMPACT MODE
-     *
-     * Used when Safari or standalone mode provides
-     * less vertical space than the full 1024 px.
-     */
-
-    @media screen and (max-height: 960px) {
-
-      #header {
-        top: 8px;
-        height: 97px;
-      }
-
-      #clock {
-        font-size: 70px;
-      }
-
-      #date {
-        margin-top: 8px;
-        font-size: 22px;
-      }
-
-      #current {
-        top: 112px;
-        height: 190px;
-      }
-
-      #location {
-        font-size: 20px;
-      }
-
-      #current-line {
-        height: 108px;
-      }
-
-      #current-icon {
-        font-size: 65px;
-        line-height: 108px;
-      }
-
-      #temperature {
-        font-size: 108px;
-        line-height: 108px;
-      }
-
-      #temperature-unit {
-        font-size: 33px;
-      }
-
-      #condition {
-        font-size: 27px;
-      }
-
-      #details-wrap {
-        top: 305px;
-        height: 142px;
-      }
-
-      .detail {
-        height: 64px;
-        margin-top: 3px;
-        margin-bottom: 3px;
-      }
-
-      .detail-label {
-        font-size: 15px;
-      }
-
-      .detail-value {
-        font-size: 23px;
-      }
-
-      #forecast-title {
-        top: 462px;
-      }
-
-      #forecast-wrap {
-        top: 489px;
-        height: 383px;
-      }
-
-      .forecast-day {
-        height: 72px;
-        margin-bottom: 5px;
-      }
-
-      .forecast-cell {
-        height: 68px;
-      }
-
-      .forecast-name {
-        font-size: 21px;
-      }
-
-      .forecast-date {
-        font-size: 16px;
-      }
-
-      .forecast-icon {
-        font-size: 36px;
-      }
-
-      .forecast-high {
-        font-size: 28px;
-      }
-
-      .forecast-low {
-        font-size: 21px;
-      }
-
-      .forecast-rain {
-        font-size: 16px;
-      }
-
-      #status {
-        bottom: 6px;
-      }
     }
   </style>
 </head>
@@ -507,7 +466,10 @@
       <div id="location">Paris</div>
 
       <div id="current-line">
-        <span id="current-icon">•</span>
+        <span id="current-icon-box">
+          <span id="current-icon">•</span>
+        </span>
+
         <span id="temperature">--</span>
         <span id="temperature-unit">°C</span>
       </div>
@@ -518,14 +480,14 @@
     <div id="details-wrap">
       <div id="details">
 
-        <div class="detail">
+        <div class="detail" id="detail-feels">
           <span class="detail-label">FEELS LIKE</span>
           <span class="detail-value">
             <span id="apparent">--</span> °C
           </span>
         </div>
 
-        <div class="detail">
+        <div class="detail" id="detail-high-low">
           <span class="detail-label">HIGH / LOW</span>
           <span class="detail-value">
             <span id="maximum">--</span>° /
@@ -533,14 +495,14 @@
           </span>
         </div>
 
-        <div class="detail">
+        <div class="detail" id="detail-rain">
           <span class="detail-label">RAIN</span>
           <span class="detail-value">
             <span id="rain">--</span>%
           </span>
         </div>
 
-        <div class="detail">
+        <div class="detail" id="detail-wind">
           <span class="detail-label">WIND</span>
           <span class="detail-value">
             <span id="wind">--</span> km/h
@@ -566,32 +528,16 @@
 
   <script type="text/javascript">
 
-    /*
-     * BASIC SETTINGS
-     */
-
     var CITY = "Paris";
-
-    /*
-     * GitHub Actions updates weather-data.js
-     * every two hours.
-     *
-     * The iPad checks for a newer copy
-     * every thirty minutes.
-     */
 
     var WEATHER_REFRESH_INTERVAL =
       30 * 60 * 1000;
 
     var WEATHER_DATA_FILE =
-      "weather-data.js";
+      "./weather-data.js";
 
     var WEATHER_CACHE_KEY =
-      "ipadWeatherPortraitV1";
-
-    /*
-     * DATE LABELS
-     */
+      "ipadWeatherPortraitV2";
 
     var DAYS_FULL = [
       "Sunday",
@@ -642,10 +588,6 @@
       "Nov",
       "Dec"
     ];
-
-    /*
-     * BASIC HELPERS
-     */
 
     function pad(number) {
       return number < 10
@@ -702,10 +644,6 @@
       );
     }
 
-    /*
-     * CLOCK AND DATE
-     */
-
     function updateClock() {
       var now = new Date();
 
@@ -723,10 +661,6 @@
         " " +
         now.getFullYear();
     }
-
-    /*
-     * WMO WEATHER CODES
-     */
 
     function getWeatherDescription(code, isDay) {
       code = Number(code);
@@ -814,10 +748,6 @@
       };
     }
 
-    /*
-     * STATUS
-     */
-
     function updateStatus(text, isError) {
       var status =
         document.getElementById("status");
@@ -841,10 +771,6 @@
         pad(generated.getMinutes())
       );
     }
-
-    /*
-     * FIVE-DAY FORECAST
-     */
 
     function renderForecast(daily) {
       var forecast =
@@ -899,7 +825,9 @@
             '</div>' +
 
             '<div class="forecast-cell forecast-icon">' +
-              description.icon +
+              '<span class="forecast-icon-symbol">' +
+                description.icon +
+              '</span>' +
             '</div>' +
 
             '<div class="forecast-cell forecast-temperature">' +
@@ -931,10 +859,6 @@
 
       forecast.innerHTML = html;
     }
-
-    /*
-     * RENDER WEATHER
-     */
 
     function renderWeather(data, fromCache) {
       var current =
@@ -1008,8 +932,8 @@
       if (fromCache) {
         updateStatus(
           sourceTime
-            ? "Offline copy · source " + sourceTime
-            : "Offline copy",
+            ? "Saved forecast · source " + sourceTime
+            : "Saved forecast",
           false
         );
       } else {
@@ -1022,10 +946,6 @@
       }
     }
 
-    /*
-     * LOCAL CACHE
-     */
-
     function saveWeatherCache(weatherText) {
       try {
         window.localStorage.setItem(
@@ -1034,7 +954,7 @@
         );
       } catch (error) {
         /*
-         * Local storage can be unavailable
+         * Storage may be unavailable
          * in private browsing.
          */
       }
@@ -1063,10 +983,6 @@
 
       return false;
     }
-
-    /*
-     * LOAD SAME-ORIGIN WEATHER DATA
-     */
 
     function loadWeather() {
       updateStatus(
@@ -1207,17 +1123,8 @@
         .appendChild(loader);
     }
 
-    /*
-     * START
-     */
-
     function startDashboard() {
       updateClock();
-
-      /*
-       * Show saved data immediately if available,
-       * then request the current same-origin file.
-       */
 
       loadWeatherCache();
       loadWeather();
