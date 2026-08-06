@@ -4,16 +4,24 @@ on:
   workflow_dispatch:
 
   schedule:
-    # Every two hours at minute 17.
+    # Every two hours at minute 37.
     # GitHub Actions cron uses UTC.
-    - cron: "17 */2 * * *"
+    - cron: "37 */2 * * *"
 
 permissions:
   contents: write
 
+# Prevent scheduled and manual runs from pushing simultaneously.
+# Keep queued runs instead of replacing them.
+concurrency:
+  group: update-weather-master
+  cancel-in-progress: false
+  queue: max
+
 jobs:
   update-weather:
     runs-on: ubuntu-latest
+    timeout-minutes: 10
 
     steps:
       - name: Check out repository
@@ -40,4 +48,18 @@ jobs:
           fi
 
           git commit -m "Update weather data"
-          git push origin HEAD:master
+
+          for attempt in 1 2 3; do
+            git pull --rebase origin master
+
+            if git push origin HEAD:master; then
+              exit 0
+            fi
+
+            if [ "$attempt" -eq 3 ]; then
+              echo "Push failed after 3 attempts."
+              exit 1
+            fi
+
+            sleep $((attempt * 5))
+          done
